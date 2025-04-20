@@ -1,0 +1,19 @@
+.detail__page {
+
+    margin-top: 25px;
+    background: #fff;
+    padding: 16px;
+}
+
+.detail__page .article__text {
+    color: #00000080;
+}
+
+.markdown-container {
+    margin-top: 25px;
+}
+
+.markdown-container-tags {
+    margin-top: 25px;
+    padding-left: 16px;
+}
