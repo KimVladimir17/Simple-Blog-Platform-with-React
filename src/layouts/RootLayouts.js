@@ -1,6 +1,15 @@
 import { NavLink, Outlet } from "react-router-dom";
+import DefaultNav from "./DefaultNav";
+import UserNav from "./UserNav";
+import { useState } from "react";
 
 export default function RootLayout() {
+  const [logged, setLogged] = useState(false);
+
+  const logging = (event) => {
+    setLogged(event);
+  };
+
   return (
     <div className="root-layout">
       <header>
@@ -12,18 +21,12 @@ export default function RootLayout() {
           >
             Realworld Blog
           </NavLink>
-          <div className="nav__links">
-            <NavLink to="sign-in" className="nav-link ">
-              Sign In
-            </NavLink>
-            <NavLink to="sign-up" className="nav-link">
-              Sign Up
-            </NavLink>
-          </div>
+          {!logged && <DefaultNav></DefaultNav>}
+          {logged && <UserNav logged={logging}></UserNav>}
         </nav>
       </header>
       <main>
-        <Outlet></Outlet>
+        <Outlet context={{ logging }}></Outlet>
       </main>
     </div>
   );

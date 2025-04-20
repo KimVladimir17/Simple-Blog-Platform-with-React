@@ -6,6 +6,7 @@ import RootLayout from "./layouts/RootLayouts";
 import ArticleDetailPage from "./pages/ArticleDetailPage";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
+import EditUserData from "./components/EditUserData";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/articles" element={<ArticleListPage />} />
           <Route path="/articles/:slug" element={<ArticleDetailPage />} />
+          <Route path="/edit-profile" element={<EditUserData></EditUserData>} />
         </Route>
       </Routes>
     </BrowserRouter>

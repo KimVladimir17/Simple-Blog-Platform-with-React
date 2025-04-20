@@ -23,8 +23,6 @@ const ArticleDetailPage = () => {
         setTimeout(async () => {
           try {
             const response = await axios.get(`${API_URL}/${slug}`);
-            console.log(response);
-
             if (response.status !== 200) {
               throw new Error(`HTTP error! Status: ${response.status}`);
             }

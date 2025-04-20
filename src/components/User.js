@@ -2,9 +2,9 @@ import userImage from "../images/user.png";
 export default function User() {
   return (
     <div className="user">
-      <div>
+      <div className="user__info">
         <h4 className="user__name">John Doe</h4>
-        <p>March 5, 2020 </p>
+        {/* <p>March 5, 2020 </p> */}
       </div>
       <img src={userImage} alt="user"></img>
     </div>
