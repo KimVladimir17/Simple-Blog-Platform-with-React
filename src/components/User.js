@@ -1,4 +1,5 @@
-import userImage from "../images/user.png";
+import userImage from "../assets/images/user.png";
+
 export default function User() {
   return (
     <div className="user">

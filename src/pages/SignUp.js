@@ -1,9 +1,16 @@
 import { useState } from "react";
-import INPUT_FIELDS from "../db/db";
-import "./Sign.css";
-import { NavLink, useNavigate, useOutletContext } from "react-router-dom";
 
-const EditUserData = () => {
+// Import My Components
+import INPUT_FIELDS from "../db/db";
+
+// Import Css Module
+import "../assets/styles/Pages.css";
+
+// Import React Components
+import { NavLink, useNavigate, useOutletContext } from "react-router-dom";
+import { signUpCheck } from "../components/localSrtorage";
+
+const SignUp = () => {
   const [formValues, setFormValues] = useState({}); // Состояние для всех полей
   const [inputError, setInputError] = useState();
   const navigate = useNavigate();
@@ -12,8 +19,8 @@ const EditUserData = () => {
 
   const handleInputChange = (event) => {
     const { id, value, name } = event.target;
-    setFormValues({ ...formValues, [id]: value }); // Обновляем состояние конкретного поля
 
+    setFormValues({ ...formValues, [id]: value }); // Обновляем состояние конкретного поля
     let newErrors = { ...inputError };
     if (!value) {
       newErrors[id] = `${name} is required`;
@@ -40,20 +47,22 @@ const EditUserData = () => {
         newErrors.repeatPassword = `Passwords must match`;
       }
     }
+
     setInputError(newErrors);
 
-    const storedUserString = localStorage.getItem("user");
-    const storedUser = JSON.parse(storedUserString);
+    if (Object.keys(newErrors).length > 0) {
+      console.log("Form has errors");
+      return; // Stop the process if errors exist
+    }
 
-    if (
-      storedUser &&
-      storedUser.email === formValues.email &&
-      storedUser.password === formValues.password
-    ) {
-      alert("you are already logged in");
+    const isEmailRegistered = signUpCheck(
+      formValues,
+      setFormValues,
+      setInputError
+    );
+    if (isEmailRegistered) {
       return false;
     }
-    return Object.keys(newErrors).length === 0;
   };
 
   const createAccountHandler = (e) => {
@@ -68,7 +77,7 @@ const EditUserData = () => {
   };
   return (
     <form className="form" onSubmit={createAccountHandler}>
-      <h3 className="form-title">Edit Profile</h3>
+      <h3 className="form-title">Create new account</h3>
       {INPUT_FIELDS.map((field) => (
         <div className="form-input-item" key={field.name}>
           <label htmlFor={field.name}>{field.text}</label>
@@ -86,12 +95,23 @@ const EditUserData = () => {
           )}
         </div>
       ))}
-
+      <div className="form-input-processing">
+        <input id="agree" required type="checkbox"></input>
+        <label htmlFor="agree">
+          I agree to the processing of my personal information
+        </label>
+      </div>
       <div className="form-btn">
-        <button className="form-input-btn">Save</button>
+        <button className="form-input-btn">Create</button>
+        <div>
+          <span>Already have an account? </span>
+          <NavLink to="/sign-in" className="nav-link ">
+            Sign In
+          </NavLink>
+        </div>
       </div>
     </form>
   );
 };
 
-export default EditUserData;
+export default SignUp;

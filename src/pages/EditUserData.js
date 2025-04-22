@@ -1,9 +1,16 @@
+// Import Hooks
 import { useState } from "react";
+
+// Import My Components
 import INPUT_FIELDS from "../db/db";
-import "./Sign.css";
+
+// Import Css Module
+import "../assets/styles/Pages.css";
+
+// Import React Components
 import { NavLink, useNavigate, useOutletContext } from "react-router-dom";
 
-const SignUp = () => {
+const EditUserData = () => {
   const [formValues, setFormValues] = useState({}); // Состояние для всех полей
   const [inputError, setInputError] = useState();
   const navigate = useNavigate();
@@ -68,7 +75,7 @@ const SignUp = () => {
   };
   return (
     <form className="form" onSubmit={createAccountHandler}>
-      <h3 className="form-title">Create new account</h3>
+      <h3 className="form-title">Edit Profile</h3>
       {INPUT_FIELDS.map((field) => (
         <div className="form-input-item" key={field.name}>
           <label htmlFor={field.name}>{field.text}</label>
@@ -86,23 +93,12 @@ const SignUp = () => {
           )}
         </div>
       ))}
-      <div className="form-input-processing">
-        <input id="agree" required type="checkbox"></input>
-        <label htmlFor="agree">
-          I agree to the processing of my personal information
-        </label>
-      </div>
+
       <div className="form-btn">
-        <button className="form-input-btn">Create</button>
-        <div>
-          <span>Already have an account? </span>
-          <NavLink to="/sign-in" className="nav-link ">
-            Sign In
-          </NavLink>
-        </div>
+        <button className="form-input-btn">Save</button>
       </div>
     </form>
   );
 };
 
-export default SignUp;
+export default EditUserData;

@@ -1,4 +1,5 @@
-import "./Pagination.css";
+// Import Css Module
+import "../assets/styles/MyComponent.css";
 
 const Pagination = ({ currentPage, totalArticlesPage, onPageChange }) => {
   const pageNumbers = Array.from(

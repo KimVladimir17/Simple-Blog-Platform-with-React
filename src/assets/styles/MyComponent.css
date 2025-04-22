@@ -1,0 +1,144 @@
+/* -------------- ArticleItem */
+
+.article-list {
+    width: 100%;
+}
+
+.article__info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.article-item {
+    display: block;
+    width: 100%;
+    margin-top: 26px;
+    padding: 16px;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 4px 12px 0px #00000026;
+}
+
+.article-link {
+    color: #333;
+    text-decoration: none;
+}
+
+.article-link:hover {
+    background-color: #f0f0f0;
+    text-decoration: none;
+}
+
+.article__box {
+    max-width: 682px;
+}
+
+.article__box-title {
+    display: flex;
+    align-items: center;
+}
+
+.article__box-title h4 {
+    line-height: 28px;
+    font-size: 20px;
+    font-weight: 400;
+    color: #366EFF;
+}
+
+.article__box-icon {
+    margin: 0 5px 0 13px;
+}
+
+.article__tags-container {
+    display: flex;
+    gap: 10px;
+}
+
+.article__box .article__tag {
+    font-size: 14px;
+    border: 1px solid #000;
+    width: max-content;
+    padding: 3px 6px;
+    border-radius: 2px;
+    margin: 6px 0 7px 0;
+}
+
+.article__text {
+    line-height: 28px;
+    font-size: 12px;
+    font-weight: 400;
+    text-transform: capitalize
+}
+
+
+/* -------------- Loading */
+
+
+.loadingContainer {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+
+.spinner {
+    border: 5px solid rgba(0, 0, 0, 0.1);
+    border-top: 5px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* -------------- pagination */
+
+.pagination {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 17px;
+    margin-top: 26px;
+}
+
+button {
+    border: none;
+    background: none;
+}
+
+.pagination .number-page {
+    padding: 3.6px 8.15px;
+    margin-right: 22.3px;
+    border-radius: 4px;
+}
+
+.pagination .number-page.active {
+    background: #1890FF;
+    color: #fff;
+}
+
+.pagination .prev {
+    margin-right: 24px;
+}
+
+.pagination .prev.acitiveBtn {
+    color: #979797;
+}
+
+.pagination .next {
+    margin-left: 2px;
+}

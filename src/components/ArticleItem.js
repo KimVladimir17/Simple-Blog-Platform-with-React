@@ -1,5 +1,10 @@
-import "./ArticleItem.css"; // CSS Module
+// Import Css Module
+import "../assets/styles/MyComponent.css";
+
+// Import Icon
 import { FaRegHeart } from "react-icons/fa";
+
+// Import My components
 import User from "./User";
 
 const ArticleItem = ({ article }) => {

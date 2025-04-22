@@ -1,12 +1,14 @@
+import "./App.css";
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import ArticleListPage from "./pages/ArticleListPage";
-import "./App.css";
+
+// Import My Pages
 import RootLayout from "./layouts/RootLayouts";
-import ArticleDetailPage from "./pages/ArticleDetailPage";
-import SignIn from "./components/SignIn";
-import SignUp from "./components/SignUp";
-import EditUserData from "./components/EditUserData";
+import ArticleListPage from "./pages/ArticleList";
+import ArticleDetailPage from "./pages/ArticleDetail";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
+import EditUserData from "./pages/EditUserData";
 
 function App() {
   return (

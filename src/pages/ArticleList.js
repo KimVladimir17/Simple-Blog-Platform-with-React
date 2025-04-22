@@ -1,11 +1,17 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import "./ArticleListPage.css"; // CSS Module
+// Import Hooks
+import { useState, useEffect } from "react";
+
+// Import Css Module
+import "../assets/styles/Pages.css";
+
+// Import My components
 import Pagination from "../components/Pagination";
 import Loading from "../components/Loading";
-
 import ArticleItem from "../components/ArticleItem";
 import ErrorMessage from "../components/ErrorMessage";
+import { axiosInstance, setLoader } from "../components/axios-plugin";
+
+// Import React Components
 import { NavLink } from "react-router-dom";
 
 const API_URL = "https://realworld.habsidev.com/api/articles";
@@ -19,12 +25,19 @@ const ArticleListPage = () => {
   const [totalArticlesCount, setTotalArticlesCount] = useState(0);
 
   useEffect(() => {
+    setLoader(setLoading);
+    return () => {
+      setLoader(null);
+    };
+  }, []);
+
+  useEffect(() => {
     const fetchArticles = async () => {
       try {
         setLoading(true);
         setTimeout(async () => {
           try {
-            const response = await axios.get(
+            const response = await axiosInstance.get(
               `${API_URL}?limit=${articlesPerPage}&offset=${
                 (currentPage - 1) * articlesPerPage
               }`
@@ -33,10 +46,8 @@ const ArticleListPage = () => {
             setTotalArticlesCount(response.data.articlesCount);
           } catch (innerErr) {
             setError(innerErr.message);
-          } finally {
-            setLoading(false);
           }
-        }, 200);
+        }, 500);
       } catch (err) {
         setError(err.message);
       }

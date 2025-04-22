@@ -1,6 +1,11 @@
+// Import React Components
 import { NavLink, Outlet } from "react-router-dom";
+
+// Import My Components
 import DefaultNav from "./DefaultNav";
 import UserNav from "./UserNav";
+
+// import Hooks
 import { useState } from "react";
 
 export default function RootLayout() {

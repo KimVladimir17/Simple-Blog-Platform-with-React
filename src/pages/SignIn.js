@@ -1,22 +1,28 @@
+// Import Hooks
 import { useState } from "react";
+
+// Import My Components
 import INPUT_FIELDS from "../db/db";
+
+// Import React Components
 import { NavLink, useNavigate, useOutletContext } from "react-router-dom";
+import { loginProcess } from "../components/localSrtorage";
 
 const SignIn = () => {
   const [formValues, setFormValues] = useState({});
-  const [inputError, setInputError] = useState();
+  const [inputError, setInputError] = useState({});
   const navigate = useNavigate();
 
   const { logging } = useOutletContext();
 
   const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setFormValues({ ...formValues, [name]: value });
+    const { id, name, value } = event.target;
+    setFormValues({ ...formValues, [id]: value });
     let newErrors = { ...inputError };
     if (!value) {
-      newErrors[name] = `${name} is required`;
+      newErrors[id] = `${name} is required`;
     } else {
-      delete newErrors[name]; // Удаляем ошибку, если поле заполнено
+      delete newErrors[id]; // Удаляем ошибку, если поле заполнено
     }
     setInputError(newErrors);
   };
@@ -36,22 +42,7 @@ const SignIn = () => {
       console.log("Form has errors");
       return; // Stop the process if errors exist
     }
-
-    const storedUserString = localStorage.getItem("user");
-    const storedUser = JSON.parse(storedUserString);
-
-    if (
-      storedUser &&
-      storedUser.email === formValues.email &&
-      storedUser.password === formValues.password
-    ) {
-      console.log("Login successful!", storedUser);
-      logging(true);
-      navigate("/");
-    } else {
-      alert("Invalid credentials");
-      setInputError({ ...inputError, login: "Invalid credentials" }); // Adding login error
-    }
+    loginProcess(formValues, logging, navigate, setFormValues, setInputError);
   };
   return (
     <form className="form" onSubmit={loginHandler}>
@@ -64,7 +55,7 @@ const SignIn = () => {
           <input
             type={field.type}
             id={field.name}
-            name={field.name}
+            name={field.text}
             className="form-input"
             placeholder={field.placeholder}
             value={formValues[field.name] || ""}
@@ -75,6 +66,7 @@ const SignIn = () => {
           )}
         </div>
       ))}
+      {inputError.login && <p className="error-message">{inputError.login}</p>}
       <div className="form-btn">
         <button className="form-input-btn">Login</button>
         <div>
