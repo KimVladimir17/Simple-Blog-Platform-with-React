@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 
 // Import React Components
-import axios from "axios";
 import { useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 

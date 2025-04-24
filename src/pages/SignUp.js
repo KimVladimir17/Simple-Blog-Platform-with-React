@@ -7,15 +7,13 @@ import INPUT_FIELDS from "../db/db";
 import "../assets/styles/Pages.css";
 
 // Import React Components
-import { NavLink, useNavigate, useOutletContext } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { signUpCheck } from "../components/localSrtorage";
 
 const SignUp = () => {
   const [formValues, setFormValues] = useState({}); // Состояние для всех полей
   const [inputError, setInputError] = useState();
   const navigate = useNavigate();
-
-  const { logging } = useOutletContext();
 
   const handleInputChange = (event) => {
     const { id, value, name } = event.target;
@@ -52,7 +50,7 @@ const SignUp = () => {
 
     if (Object.keys(newErrors).length > 0) {
       console.log("Form has errors");
-      return; // Stop the process if errors exist
+      return false; // Stop the process if errors exist
     }
 
     const isEmailRegistered = signUpCheck(
@@ -60,20 +58,19 @@ const SignUp = () => {
       setFormValues,
       setInputError
     );
+
     if (isEmailRegistered) {
       return false;
     }
+    return true;
   };
 
   const createAccountHandler = (e) => {
     e.preventDefault();
     if (validateForm()) {
       localStorage.setItem("user", JSON.stringify(formValues));
-      logging(true);
-      navigate("/");
+      navigate("/sign-in");
     }
-
-    return;
   };
   return (
     <form className="form" onSubmit={createAccountHandler}>

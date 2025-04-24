@@ -11,9 +11,10 @@ import { loginProcess } from "../components/localSrtorage";
 const SignIn = () => {
   const [formValues, setFormValues] = useState({});
   const [inputError, setInputError] = useState({});
+
   const navigate = useNavigate();
 
-  const { logging } = useOutletContext();
+  const { setLogged } = useOutletContext();
 
   const handleInputChange = (event) => {
     const { id, name, value } = event.target;
@@ -42,7 +43,7 @@ const SignIn = () => {
       console.log("Form has errors");
       return; // Stop the process if errors exist
     }
-    loginProcess(formValues, logging, navigate, setFormValues, setInputError);
+    loginProcess(formValues, setLogged, navigate, setFormValues, setInputError);
   };
   return (
     <form className="form" onSubmit={loginHandler}>

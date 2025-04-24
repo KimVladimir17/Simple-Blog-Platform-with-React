@@ -9,6 +9,7 @@ import ArticleDetailPage from "./pages/ArticleDetail";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import EditUserData from "./pages/EditUserData";
+import FormArticle from "./pages/FormArticle";
 
 function App() {
   return (
@@ -21,6 +22,10 @@ function App() {
           <Route path="/articles" element={<ArticleListPage />} />
           <Route path="/articles/:slug" element={<ArticleDetailPage />} />
           <Route path="/edit-profile" element={<EditUserData></EditUserData>} />
+          <Route
+            path="/create-new-article"
+            element={<FormArticle></FormArticle>}
+          />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -6,14 +6,28 @@ import DefaultNav from "./DefaultNav";
 import UserNav from "./UserNav";
 
 // import Hooks
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function RootLayout() {
-  const [logged, setLogged] = useState(false);
+  const [userName, setUserName] = useState(() => {
+    const storedUser = localStorage.getItem("user");
+    try {
+      const userObject = JSON.parse(storedUser);
+      return userObject ? userObject.username : ""; // Или другой дефолт
+    } catch (error) {
+      console.error("Error parsing user from localStorage:", error);
+      return ""; // Default empty name
+    }
+  });
 
-  const logging = (event) => {
-    setLogged(event);
-  };
+  const [logged, setLogged] = useState(() => {
+    const storedLogged = localStorage.getItem("logged");
+    return storedLogged === "true" ? true : false;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("logged", logged.toString());
+  }, [logged]);
 
   return (
     <div className="root-layout">
@@ -27,11 +41,13 @@ export default function RootLayout() {
             Realworld Blog
           </NavLink>
           {!logged && <DefaultNav></DefaultNav>}
-          {logged && <UserNav logged={logging}></UserNav>}
+          {logged && (
+            <UserNav setLogged={setLogged} userName={userName}></UserNav>
+          )}
         </nav>
       </header>
       <main>
-        <Outlet context={{ logging }}></Outlet>
+        <Outlet context={{ setLogged: setLogged, userName: userName }}></Outlet>
       </main>
     </div>
   );

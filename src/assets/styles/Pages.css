@@ -9,6 +9,14 @@
 
 
 
+.nav-link-creat-article {
+    color: #52C41A;
+    border: 1px solid #52C41A;
+    border-radius: 5px;
+    padding: 6px 18.17px 10px 18.17px;
+}
+
+
 /* -------------- ArticleDetail*/
 
 
@@ -39,7 +47,6 @@
 
 
 /* -------------- Sign-In / Sign-Up */
-
 
 
 .form {
@@ -121,4 +128,68 @@
     color: red;
     padding: 2px;
     font-size: 14px;
+}
+
+
+
+
+/* -------------- Form-Article */
+
+.article-form {
+    background: #FFF;
+    padding: 48px 32px;
+    margin-top: 34px;
+}
+
+.article-form-input {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 21px;
+}
+
+.article-form-input textarea {
+    height: 168px;
+}
+
+
+.form-input-tag {
+    width: 300px;
+}
+
+.article-form-tag {
+    display: flex;
+}
+
+.form-tag-btn {
+    padding: 8px 36px;
+    border-radius: 4px;
+    margin: 0 17px;
+}
+
+.tag-btn-delete {
+    color: #F5222D;
+    border: 1px solid #F5222D;
+}
+
+.tag-btn-add {
+    color: #1890FF;
+    border: 1px solid #1890FF;
+}
+
+.article-form .form-input-btn {
+    width: 319px;
+    margin: 0;
+}
+
+.tag-item {
+    display: flex;
+    margin-bottom: 5px;
+}
+
+
+
+
+/* -------------- User */
+.user__name {
+    text-transform: capitalize;
 }

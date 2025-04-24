@@ -20,7 +20,7 @@ const signUpCheck = (formValues, setFormValues) => {
 
 const loginProcess = (
   formValues,
-  logging,
+  setLogged,
   navigate,
   setFormValues,
   setInputError
@@ -40,7 +40,7 @@ const loginProcess = (
       storedUser.email === formValues.email &&
       storedUser.password === formValues.password
     ) {
-      logging(true);
+      setLogged(true);
       navigate("/");
     } else {
       setInputError({ ...setInputError, login: "Invalid credentials" });

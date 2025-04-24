@@ -39,7 +39,7 @@ const ArticleItem = ({ article }) => {
         </p>
       </div>
       <div className="article__user">
-        <User></User>
+        <User userName={article.author.username}></User>
       </div>
     </div>
   );
