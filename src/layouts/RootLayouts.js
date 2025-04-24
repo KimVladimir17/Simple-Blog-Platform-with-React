@@ -10,15 +10,13 @@ import { useEffect, useState } from "react";
 
 export default function RootLayout() {
   const [userName, setUserName] = useState(() => {
-    const storedUser = localStorage.getItem("user");
-    try {
-      const userObject = JSON.parse(storedUser);
-      return userObject ? userObject.username : ""; // Или другой дефолт
-    } catch (error) {
-      console.error("Error parsing user from localStorage:", error);
-      return ""; // Default empty name
-    }
+    const storedUserName = localStorage.getItem("userName");
+    return storedUserName || "";
   });
+
+  useEffect(() => {
+    localStorage.setItem("userName", userName || "");
+  }, [userName]);
 
   const [logged, setLogged] = useState(() => {
     const storedLogged = localStorage.getItem("logged");
@@ -47,7 +45,13 @@ export default function RootLayout() {
         </nav>
       </header>
       <main>
-        <Outlet context={{ setLogged: setLogged, userName: userName }}></Outlet>
+        <Outlet
+          context={{
+            setLogged: setLogged,
+            userName: userName,
+            setUserName: setUserName,
+          }}
+        ></Outlet>
       </main>
     </div>
   );

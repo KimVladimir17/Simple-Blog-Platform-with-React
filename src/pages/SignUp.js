@@ -7,13 +7,15 @@ import INPUT_FIELDS from "../db/db";
 import "../assets/styles/Pages.css";
 
 // Import React Components
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useOutletContext } from "react-router-dom";
 import { signUpCheck } from "../components/localSrtorage";
 
 const SignUp = () => {
   const [formValues, setFormValues] = useState({}); // Состояние для всех полей
   const [inputError, setInputError] = useState();
   const navigate = useNavigate();
+
+  const { setUserName } = useOutletContext();
 
   const handleInputChange = (event) => {
     const { id, value, name } = event.target;
@@ -36,9 +38,21 @@ const SignUp = () => {
       }
     });
 
+    if (!newErrors.username) {
+      if (formValues.username.length < 3)
+        newErrors.username = `Your User name needs to be at least 3 characters`;
+      if (formValues.username.length > 20) {
+        newErrors.username = `Your User name must be no more than 20 characters long.
+`;
+      }
+    }
+
     if (!newErrors.password) {
       if (formValues.password.length < 6)
         newErrors.password = `Your password needs to be at least 6 characters`;
+
+      if (formValues.password.length > 40)
+        newErrors.password = `Your password be no more than 40 characters`;
     }
     if (!newErrors.repeatPassword) {
       if (formValues.password !== formValues.repeatPassword) {
@@ -68,6 +82,7 @@ const SignUp = () => {
   const createAccountHandler = (e) => {
     e.preventDefault();
     if (validateForm()) {
+      setUserName(formValues.username);
       localStorage.setItem("user", JSON.stringify(formValues));
       navigate("/sign-in");
     }
