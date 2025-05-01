@@ -9,25 +9,29 @@ import ArticleDetailPage from "./pages/ArticleDetail";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import EditUserData from "./pages/EditUserData";
-import FormArticle from "./pages/FormArticle";
+import { AuthProvider } from "./contexts/AuthContext";
+import CreateNewArticle from "./pages/CreateNewArticle";
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<RootLayout />}>
-          <Route path="/" element={<ArticleListPage />} />
-          <Route path="/sign-in" element={<SignIn />} />
-          <Route path="/sign-up" element={<SignUp />} />
-          <Route path="/articles" element={<ArticleListPage />} />
-          <Route path="/articles/:slug" element={<ArticleDetailPage />} />
-          <Route path="/edit-profile" element={<EditUserData></EditUserData>} />
-          <Route
-            path="/create-new-article"
-            element={<FormArticle></FormArticle>}
-          />
-        </Route>
-      </Routes>
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<RootLayout />}>
+            <Route path="/" element={<ArticleListPage />} />
+            <Route path="/sign-in" element={<SignIn />} />
+            <Route path="/sign-up" element={<SignUp />} />
+            <Route path="/articles" element={<ArticleListPage />} />
+            <Route path="/articles/:slug" element={<ArticleDetailPage />} />
+            <Route
+              path="/edit-profile"
+              element={<EditUserData></EditUserData>}
+            />
+            <Route path="/create-new-article" element={<CreateNewArticle />} />
+            {/* <Route path="/articles/:slug/edit" element={<FormArticle />} /> */}
+          </Route>
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   );
 }

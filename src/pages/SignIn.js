@@ -1,56 +1,59 @@
 // Import Hooks
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 // Import My Components
 import INPUT_FIELDS from "../db/db";
 
 // Import React Components
-import { NavLink, useNavigate, useOutletContext } from "react-router-dom";
-import { loginProcess } from "../components/localSrtorage";
+import { NavLink, useNavigate } from "react-router-dom";
+import { inputValidate } from "../components/valitadeUserData";
+import { AuthContext } from "../contexts/AuthContext";
+import { api } from "../api/api";
 
 const SignIn = () => {
   const [formValues, setFormValues] = useState({});
   const [inputError, setInputError] = useState({});
-
   const navigate = useNavigate();
 
-  const { setLogged } = useOutletContext();
+  const { login } = useContext(AuthContext); // Use login from context
+
+  const loginFormInput = INPUT_FIELDS.filter(
+    (field) => field.name === "email" || field.name === "password"
+  );
 
   const handleInputChange = (event) => {
-    const { id, name, value } = event.target;
-    setFormValues({ ...formValues, [id]: value });
-    let newErrors = { ...inputError };
-    if (!value) {
-      newErrors[id] = `${name} is required`;
-    } else {
-      delete newErrors[id]; // Удаляем ошибку, если поле заполнено
-    }
-    setInputError(newErrors);
+    inputValidate(event, formValues, setFormValues, inputError, setInputError);
   };
 
-  const loginHandler = (e) => {
+  const loginHandler = async (e) => {
     e.preventDefault();
-    let newErrors = {};
-    if (!formValues.email) {
-      newErrors.email = "Email is required";
-    }
-    if (!formValues.password) {
-      newErrors.password = "Password is required";
-    }
+    const newErrors = {};
+    loginFormInput.forEach((field) => {
+      if (!formValues[field.name]) {
+        newErrors[field.name] = `${field.text} is required`;
+      }
+    }); // Get errors from validateInput
+
     setInputError(newErrors); // Set errors using the hook's function
 
     if (Object.keys(newErrors).length > 0) {
-      console.log("Form has errors");
-      return; // Stop the process if errors exist
+      return false; // Stop the process if errors exist
     }
-    loginProcess(formValues, setLogged, navigate, setFormValues, setInputError);
+
+    try {
+      const userData = await api.login(formValues.email, formValues.password);
+      login(userData);
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+      setFormValues("");
+      setInputError({ ...setInputError, login: "Invalid credentials" });
+    }
   };
   return (
     <form className="form" onSubmit={loginHandler}>
       <h3 className="form-title">Sign In</h3>
-      {INPUT_FIELDS.filter(
-        (field) => field.name === "email" || field.name === "password"
-      ).map((field) => (
+      {loginFormInput.map((field) => (
         <div className="form-input-item" key={field.name}>
           <label htmlFor={field.name}>{field.text}</label>
           <input

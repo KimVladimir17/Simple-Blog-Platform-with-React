@@ -1,5 +1,5 @@
 // Import Hooks
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 // Import My Components
 import INPUT_FIELDS from "../db/db";
@@ -8,70 +8,57 @@ import INPUT_FIELDS from "../db/db";
 import "../assets/styles/Pages.css";
 
 // Import React Components
-import { NavLink, useNavigate, useOutletContext } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { inputValidate, formValidate } from "../components/valitadeUserData";
+import { api } from "../api/api";
+import { AuthContext } from "../contexts/AuthContext";
 
 const EditUserData = () => {
   const [formValues, setFormValues] = useState({}); // Состояние для всех полей
   const [inputError, setInputError] = useState();
   const navigate = useNavigate();
 
-  const { logging } = useOutletContext();
+  const { updateUser } = useContext(AuthContext);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const user = await api.getCurrentUser();
+        setFormValues({
+          username: user.username || "",
+          email: user.email || "",
+        });
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
+      }
+    };
+    fetchUserData();
+  }, []);
 
   const handleInputChange = (event) => {
-    const { id, value, name } = event.target;
-    setFormValues({ ...formValues, [id]: value }); // Обновляем состояние конкретного поля
-
-    let newErrors = { ...inputError };
-    if (!value) {
-      newErrors[id] = `${name} is required`;
-    } else {
-      delete newErrors[id]; // Удаляем ошибку, если поле заполнено
-    }
-    setInputError(newErrors);
+    inputValidate(event, formValues, setFormValues, inputError, setInputError);
   };
 
-  const validateForm = () => {
-    let newErrors = {};
-    INPUT_FIELDS.forEach((field) => {
-      if (!formValues[field.name]) {
-        newErrors[field.name] = `${field.text} is required`;
-      }
-    });
-
-    if (!newErrors.password) {
-      if (formValues.password.length < 6)
-        newErrors.password = `Your password needs to be at least 6 characters`;
-    }
-    if (!newErrors.repeatPassword) {
-      if (formValues.password !== formValues.repeatPassword) {
-        newErrors.repeatPassword = `Passwords must match`;
-      }
-    }
-    setInputError(newErrors);
-
-    const storedUserString = localStorage.getItem("user");
-    const storedUser = JSON.parse(storedUserString);
-
-    if (
-      storedUser &&
-      storedUser.email === formValues.email &&
-      storedUser.password === formValues.password
-    ) {
-      alert("you are already logged in");
-      return false;
-    }
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const createAccountHandler = (e) => {
+  const createAccountHandler = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      localStorage.setItem("user", JSON.stringify(formValues));
-      logging(true);
-      navigate("/");
-    }
+    const newErrors = formValidate(formValues);
+    setInputError(newErrors);
 
-    return;
+    if (Object.keys(newErrors).length > 0) {
+      return false; // Stop the process if errors exist
+    }
+    try {
+      await api.updateUser({
+        username: formValues.username,
+        email: formValues.email,
+        password: formValues.password,
+        image: formValues.image,
+      });
+      updateUser(formValues);
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <form className="form" onSubmit={createAccountHandler}>

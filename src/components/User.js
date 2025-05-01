@@ -1,13 +1,17 @@
-import userImage from "../assets/images/user.png";
+import defaultUserImage from "../assets/images/user.png";
 
-export default function User({ userName }) {
+export default function User({ userName, userImage, formattedDate }) {
   return (
     <div className="user">
       <div className="user__info">
         <h4 className="user__name">{userName}</h4>
-        {/* <p>March 5, 2020 </p> */}
+        <p className="user__date">{formattedDate}</p>
       </div>
-      <img src={userImage} alt="user"></img>
+      <img
+        src={userImage ? userImage : defaultUserImage}
+        className="user-image"
+        alt="user"
+      ></img>
     </div>
   );
 }

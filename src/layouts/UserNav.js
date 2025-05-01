@@ -1,25 +1,18 @@
 // Import React Components
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 // Import My Components
 import User from "../components/User.js";
-
-export default function UserNav({ setLogged, userName }) {
-  const navigate = useNavigate();
-  const logOutHandler = (e) => {
-    setLogged(false);
-    navigate("/");
-  };
-
+export default function UserNav({ userName, logout, userImage }) {
   return (
     <div className="nav__links">
       <NavLink to="/create-new-article" className="nav-link-creat-article">
         Create article
       </NavLink>
       <NavLink to="/edit-profile" className="nav-login-user">
-        <User userName={userName}></User>
+        <User userName={userName} userImage={userImage}></User>
       </NavLink>
-      <NavLink to="/" className="nav-logout" onClick={logOutHandler}>
+      <NavLink to="/" className="nav-logout" onClick={logout}>
         Log Out
       </NavLink>
     </div>

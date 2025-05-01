@@ -1,9 +1,24 @@
 import { useState, useRef, useEffect } from "react";
+import { axiosInstance } from "../api/axios-plugin";
+import { useNavigate } from "react-router-dom";
 
-const FormArticle = () => {
+const CreateNewArticle = ({ article }) => {
   const [tag, setTag] = useState([]);
   const [newTag, setNewTag] = useState("");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [text, setText] = useState("");
+
+  const navigate = useNavigate();
   const inputRef = useRef();
+  const titleInputRef = useRef();
+
+  const articleData = {
+    title: title,
+    description: description,
+    body: text,
+    tagList: tag,
+  };
 
   useEffect(() => {
     inputRef.current.focus();
@@ -31,8 +46,29 @@ const FormArticle = () => {
     setNewTag(e.target.value);
   };
 
-  const createNewArticle = (e) => {
+  const clearForm = () => {
+    setTitle("");
+    setDescription("");
+    setText("");
+    setTag([]);
+    titleInputRef.current.focus(); //Set focus to the title after submit
+  };
+  const createNewArticle = async (e) => {
     e.preventDefault();
+
+    try {
+      const response = await axiosInstance.post("/articles", {
+        article: { ...articleData },
+      });
+      if (response.status === 201) {
+        clearForm();
+        navigate("/");
+      } else {
+        console.error("Error creating article:", response.status);
+      }
+    } catch (error) {
+      console.error("Error creating article:", error);
+    }
   };
   return (
     <div className="container">
@@ -41,15 +77,33 @@ const FormArticle = () => {
           <h3 className="form-title">Create new article</h3>
           <div className="article-form-input">
             <label>Title</label>
-            <input type="text" className="form-input" placeholder="Title" />
+            <input
+              type="text"
+              className="form-input"
+              placeholder="Title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              ref={titleInputRef}
+            />
           </div>
           <div className="article-form-input">
             <label>Short description</label>
-            <input type="text" className="form-input" placeholder="Tilte" />
+            <input
+              type="text"
+              className="form-input"
+              placeholder="Short description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
           </div>
           <div className="article-form-input">
             <label>Text</label>
-            <textarea className="form-input" placeholder="Text"></textarea>
+            <textarea
+              className="form-input"
+              placeholder="Text"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+            ></textarea>
           </div>
           <div className="article-form-input">
             <label>Tags</label>
@@ -96,4 +150,4 @@ const FormArticle = () => {
   );
 };
 
-export default FormArticle;
+export default CreateNewArticle;

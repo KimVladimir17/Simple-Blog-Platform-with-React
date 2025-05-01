@@ -6,26 +6,13 @@ import DefaultNav from "./DefaultNav";
 import UserNav from "./UserNav";
 
 // import Hooks
-import { useEffect, useState } from "react";
+import { useContext } from "react";
+
+import { AuthContext } from "../contexts/AuthContext"; // Corrected import
 
 export default function RootLayout() {
-  const [userName, setUserName] = useState(() => {
-    const storedUserName = localStorage.getItem("userName");
-    return storedUserName || "";
-  });
-
-  useEffect(() => {
-    localStorage.setItem("userName", userName || "");
-  }, [userName]);
-
-  const [logged, setLogged] = useState(() => {
-    const storedLogged = localStorage.getItem("logged");
-    return storedLogged === "true" ? true : false;
-  });
-
-  useEffect(() => {
-    localStorage.setItem("logged", logged.toString());
-  }, [logged]);
+  const { isAuthenticated, userName, logout, userImage } =
+    useContext(AuthContext);
 
   return (
     <div className="root-layout">
@@ -38,18 +25,21 @@ export default function RootLayout() {
           >
             Realworld Blog
           </NavLink>
-          {!logged && <DefaultNav></DefaultNav>}
-          {logged && (
-            <UserNav setLogged={setLogged} userName={userName}></UserNav>
+          {isAuthenticated ? (
+            <UserNav
+              userImage={userImage ? userImage : null}
+              userName={userName ? userName : "User"}
+              logout={logout}
+            ></UserNav>
+          ) : (
+            <DefaultNav></DefaultNav>
           )}
         </nav>
       </header>
       <main>
         <Outlet
           context={{
-            setLogged: setLogged,
-            userName: userName,
-            setUserName: setUserName,
+            userName: userName ? userName.username : "User", // Access user and username
           }}
         ></Outlet>
       </main>

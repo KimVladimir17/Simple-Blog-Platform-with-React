@@ -3,7 +3,7 @@ import axios from "axios";
 const axiosInstance = axios.create({
   baseURL: "https://realworld.habsidev.com/api",
   timeout: 10000,
-  header: {
+  headers: {
     "Content-Type": "application/json",
   },
 });
@@ -16,6 +16,15 @@ const setLoader = (callback) => {
 
 axiosInstance.interceptors.request.use(
   (config) => {
+    const userString = localStorage.getItem("user");
+
+    if (userString) {
+      const user = JSON.parse(userString);
+      if (user?.token) {
+        config.headers.Authorization = `Token ${user.token}`;
+      }
+    }
+
     if (setLoadingCallback) {
       setLoadingCallback(true);
     }
@@ -38,7 +47,7 @@ axiosInstance.interceptors.response.use(
   },
   (error) => {
     if (setLoadingCallback) {
-      setLoadingCallback(true);
+      setLoadingCallback(false);
     }
     return Promise.reject(error);
   }

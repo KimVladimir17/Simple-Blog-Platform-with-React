@@ -70,6 +70,34 @@
     text-transform: capitalize
 }
 
+.article__user {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+}
+
+.article__user-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    font-size: 14px;
+}
+
+.article-btn {
+    padding: 6px 17px 5.1px 17px;
+    border-radius: 5px;
+}
+
+.article-btn.edite {
+    border: 1px solid #52C41A;
+    color: #52C41A;
+}
+
+.article-btn.delete {
+    border: 1px solid #F5222D;
+    color: #F5222D;
+    margin-right: 12px;
+}
 
 /* -------------- Loading */
 
@@ -141,4 +169,35 @@ button {
 
 .pagination .next {
     margin-left: 2px;
+}
+
+
+
+/* -------------- user */
+
+.user {
+    display: flex;
+    font-size: 18px;
+    align-items: center;
+}
+
+.user__info {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    margin-right: 13px;
+}
+
+.user__date {
+    font-size: 12px;
+    line-height: 22px;
+    color: #00000080;
+    font-weight: 400;
+}
+
+
+.user-image {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
 }

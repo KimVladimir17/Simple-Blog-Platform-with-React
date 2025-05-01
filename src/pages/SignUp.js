@@ -7,84 +7,38 @@ import INPUT_FIELDS from "../db/db";
 import "../assets/styles/Pages.css";
 
 // Import React Components
-import { NavLink, useNavigate, useOutletContext } from "react-router-dom";
-import { signUpCheck } from "../components/localSrtorage";
+import { NavLink, useNavigate } from "react-router-dom";
+import { inputValidate, formValidate } from "../components/valitadeUserData";
+import { api } from "../api/api";
 
 const SignUp = () => {
   const [formValues, setFormValues] = useState({}); // Состояние для всех полей
-  const [inputError, setInputError] = useState();
+  const [inputError, setInputError] = useState({});
   const navigate = useNavigate();
 
-  const { setUserName } = useOutletContext();
-
   const handleInputChange = (event) => {
-    const { id, value, name } = event.target;
-
-    setFormValues({ ...formValues, [id]: value }); // Обновляем состояние конкретного поля
-    let newErrors = { ...inputError };
-    if (!value) {
-      newErrors[id] = `${name} is required`;
-    } else {
-      delete newErrors[id]; // Удаляем ошибку, если поле заполнено
-    }
-    setInputError(newErrors);
+    inputValidate(event, formValues, setFormValues, inputError, setInputError);
   };
 
-  const validateForm = () => {
-    let newErrors = {};
-    INPUT_FIELDS.forEach((field) => {
-      if (!formValues[field.name]) {
-        newErrors[field.name] = `${field.text} is required`;
-      }
-    });
-
-    if (!newErrors.username) {
-      if (formValues.username.length < 3)
-        newErrors.username = `Your User name needs to be at least 3 characters`;
-      if (formValues.username.length > 20) {
-        newErrors.username = `Your User name must be no more than 20 characters long.
-`;
-      }
-    }
-
-    if (!newErrors.password) {
-      if (formValues.password.length < 6)
-        newErrors.password = `Your password needs to be at least 6 characters`;
-
-      if (formValues.password.length > 40)
-        newErrors.password = `Your password be no more than 40 characters`;
-    }
-    if (!newErrors.repeatPassword) {
-      if (formValues.password !== formValues.repeatPassword) {
-        newErrors.repeatPassword = `Passwords must match`;
-      }
-    }
-
-    setInputError(newErrors);
+  const createAccountHandler = async (e) => {
+    e.preventDefault();
+    const newErrors = formValidate(formValues); // Get errors from validateInput
+    setInputError(newErrors); // Set errors to state
 
     if (Object.keys(newErrors).length > 0) {
-      console.log("Form has errors");
-      return false; // Stop the process if errors exist
+      return; // Stop if errors exist
     }
 
-    const isEmailRegistered = signUpCheck(
-      formValues,
-      setFormValues,
-      setInputError
-    );
-
-    if (isEmailRegistered) {
-      return false;
-    }
-    return true;
-  };
-
-  const createAccountHandler = (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      setUserName(formValues.username);
-      localStorage.setItem("user", JSON.stringify(formValues));
+    try {
+      await api.register(
+        formValues.username,
+        formValues.email,
+        formValues.password,
+        formValues.image
+      );
       navigate("/sign-in");
+    } catch (error) {
+      console.error("Registration error:", error);
     }
   };
   return (
@@ -102,7 +56,7 @@ const SignUp = () => {
             value={formValues[field.name] || ""} // Получаем значение из состояния
             onChange={handleInputChange} // Используем один обработчик для всех полей
           />
-          {inputError && (
+          {inputError[field.name] && (
             <p className="error-message">{inputError[field.name]}</p>
           )}
         </div>

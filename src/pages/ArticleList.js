@@ -9,7 +9,7 @@ import Pagination from "../components/Pagination";
 import Loading from "../components/Loading";
 import ArticleItem from "../components/ArticleItem";
 import ErrorMessage from "../components/ErrorMessage";
-import { axiosInstance, setLoader } from "../components/axios-plugin";
+import { axiosInstance, setLoader } from "../api/axios-plugin";
 
 // Import React Components
 import { NavLink } from "react-router-dom";
@@ -34,7 +34,6 @@ const ArticleListPage = () => {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        setLoading(true);
         setTimeout(async () => {
           try {
             const response = await axiosInstance.get(

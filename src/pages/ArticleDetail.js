@@ -1,38 +1,38 @@
 // Import Hooks
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
 // Import React Components
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 
 // Import My Components
 import Loading from "../components/Loading";
 import ErrorMessage from "../components/ErrorMessage";
 import ArticleItem from "../components/ArticleItem";
-import { axiosInstance, setLoader } from "../components/axios-plugin";
+import { axiosInstance, setLoader } from "../api/axios-plugin";
 
 // Import Css Module
 import "../assets/styles/Pages.css";
+import { AuthContext } from "../contexts/AuthContext";
 
 // import ErrorMessage from "../components/ErrorMessage"; // Uncomment
 
 const API_URL = "https://realworld.habsidev.com/api/articles";
-
-const ArticleDetailPage = () => {
-  const { slug } = useParams();
+const useFetchArticle = (slug) => {
   const [article, setArticle] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
   useEffect(() => {
     setLoader(setLoading);
     return () => {
       setLoader(null);
     };
   }, []);
+
   useEffect(() => {
     const fetchArticle = async () => {
       try {
-        setLoading(true);
         setTimeout(async () => {
           try {
             const response = await axiosInstance.get(`${API_URL}/${slug}`);
@@ -48,9 +48,18 @@ const ArticleDetailPage = () => {
         setError(error.message);
       }
     };
-
     fetchArticle();
   }, [slug]);
+
+  return { article, loading, error };
+};
+
+const ArticleDetailPage = () => {
+  const { slug } = useParams();
+  const { article, loading, error } = useFetchArticle(slug);
+  const navigate = useNavigate();
+
+  const { userName } = useContext(AuthContext);
 
   if (loading) return <Loading />;
 
@@ -76,10 +85,28 @@ const ArticleDetailPage = () => {
           )
           .join("\n");
 
+  const isAuthor =
+    article && article.author && userName === article.author.username;
+
+  const handleDeleteArticle = async (slug) => {
+    try {
+      await axiosInstance.delete(`/articles/${slug}`);
+      navigate("/");
+      console.log("Article deleted successfully");
+    } catch (error) {
+      console.error("Error deleting article:", error);
+    }
+  };
+
   return (
     <div className=" container ">
       <div className="article-item">
-        <ArticleItem article={article}></ArticleItem>
+        <ArticleItem
+          article={article}
+          onDelete={handleDeleteArticle}
+          isAuthor={isAuthor}
+          slug={slug}
+        ></ArticleItem>
         <div className="markdown-container">
           <ReactMarkdown children={markdownMainText}></ReactMarkdown>
           <div className="markdown-container-tags">
