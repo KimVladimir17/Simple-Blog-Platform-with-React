@@ -9,7 +9,6 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
-
     if (user) {
       setIsAuthenticated(true);
       setUserName(user ? user.username : null);

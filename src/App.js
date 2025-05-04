@@ -11,6 +11,7 @@ import SignUp from "./pages/SignUp";
 import EditUserData from "./pages/EditUserData";
 import { AuthProvider } from "./contexts/AuthContext";
 import CreateNewArticle from "./pages/CreateNewArticle";
+import EditArticle from "./pages/EditArticle";
 
 function App() {
   return (
@@ -28,7 +29,7 @@ function App() {
               element={<EditUserData></EditUserData>}
             />
             <Route path="/create-new-article" element={<CreateNewArticle />} />
-            {/* <Route path="/articles/:slug/edit" element={<FormArticle />} /> */}
+            <Route path="/articles/:slug/edit" element={<EditArticle />} />
           </Route>
         </Routes>
       </AuthProvider>

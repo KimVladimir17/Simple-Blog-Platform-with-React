@@ -9,12 +9,11 @@ import Pagination from "../components/Pagination";
 import Loading from "../components/Loading";
 import ArticleItem from "../components/ArticleItem";
 import ErrorMessage from "../components/ErrorMessage";
-import { axiosInstance, setLoader } from "../api/axios-plugin";
+import { setLoader } from "../service/api/axios-plugin";
 
 // Import React Components
 import { NavLink } from "react-router-dom";
-
-const API_URL = "https://realworld.habsidev.com/api/articles";
+import articlesService from "../service/articles/articlesService";
 
 const ArticleListPage = () => {
   const [articles, setArticles] = useState([]);
@@ -33,13 +32,13 @@ const ArticleListPage = () => {
 
   useEffect(() => {
     const fetchArticles = async () => {
+      setLoading(true);
       try {
         setTimeout(async () => {
           try {
-            const response = await axiosInstance.get(
-              `${API_URL}?limit=${articlesPerPage}&offset=${
-                (currentPage - 1) * articlesPerPage
-              }`
+            const response = await articlesService.getArticles(
+              articlesPerPage,
+              currentPage
             );
             setArticles(response.data.articles);
             setTotalArticlesCount(response.data.articlesCount);

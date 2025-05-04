@@ -39,7 +39,7 @@ export default function RootLayout() {
       <main>
         <Outlet
           context={{
-            userName: userName ? userName.username : "User", // Access user and username
+            userName: userName ? userName.username : "User",
           }}
         ></Outlet>
       </main>

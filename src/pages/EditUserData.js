@@ -2,16 +2,17 @@
 import { useContext, useEffect, useState } from "react";
 
 // Import My Components
-import INPUT_FIELDS from "../db/db";
+import INPUT_FIELDS from "../service/db/db";
 
 // Import Css Module
 import "../assets/styles/Pages.css";
 
 // Import React Components
 import { useNavigate } from "react-router-dom";
-import { inputValidate, formValidate } from "../components/valitadeUserData";
-import { api } from "../api/api";
+import { inputValidate, formValidate } from "../service/utils/valitadeUserData";
 import { AuthContext } from "../contexts/AuthContext";
+import valitadeApi from "../service/utils/valitadeApi";
+import { UserService } from "../service/api/UserService";
 
 const EditUserData = () => {
   const [formValues, setFormValues] = useState({}); // Состояние для всех полей
@@ -23,7 +24,7 @@ const EditUserData = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const user = await api.getCurrentUser();
+        const user = await UserService.getCurrentUser();
         setFormValues({
           username: user.username || "",
           email: user.email || "",
@@ -48,16 +49,17 @@ const EditUserData = () => {
       return false; // Stop the process if errors exist
     }
     try {
-      await api.updateUser({
+      await UserService.updateUser({
         username: formValues.username,
         email: formValues.email,
         password: formValues.password,
-        image: formValues.image,
+        image: formValues.image || null,
       });
+
       updateUser(formValues);
       navigate("/");
     } catch (error) {
-      console.log(error);
+      valitadeApi(error, setInputError);
     }
   };
   return (

@@ -2,13 +2,13 @@
 import { useContext, useState } from "react";
 
 // Import My Components
-import INPUT_FIELDS from "../db/db";
+import INPUT_FIELDS from "../service/db/db";
 
 // Import React Components
 import { NavLink, useNavigate } from "react-router-dom";
-import { inputValidate } from "../components/valitadeUserData";
+import { inputValidate } from "../service/utils/valitadeUserData";
 import { AuthContext } from "../contexts/AuthContext";
-import { api } from "../api/api";
+import { AuthService } from "../service/api/AuthService";
 
 const SignIn = () => {
   const [formValues, setFormValues] = useState({});
@@ -41,7 +41,10 @@ const SignIn = () => {
     }
 
     try {
-      const userData = await api.login(formValues.email, formValues.password);
+      const userData = await AuthService.login(
+        formValues.email,
+        formValues.password
+      );
       login(userData);
       navigate("/");
     } catch (error) {

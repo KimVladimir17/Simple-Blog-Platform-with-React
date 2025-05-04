@@ -9,26 +9,22 @@ import User from "./User";
 import { NavLink } from "react-router-dom";
 
 const ArticleItem = ({ article, isAuthor, onDelete }) => {
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const options = {
+  const formattedDate = new Date(article.updatedAt).toLocaleDateString(
+    "en-US",
+    {
       year: "numeric",
       month: "long",
       day: "numeric",
-    };
-    return date.toLocaleDateString("en-US", options); // Используйте нужную локаль
-  };
+    }
+  );
 
-  const formattedDate = formatDate(article.updatedAt);
+  const validTags = article.tagList?.filter((tag) => tag != null) || [];
 
-  const validTags = Array.isArray(article.tagList)
-    ? article.tagList.filter((tag) => tag != null)
-    : [];
   const hasValidTags = validTags.length > 0;
 
   const handleDelete = () => {
     if (onDelete) {
-      onDelete(article.slug); // Assuming you have a function to handle deletion in the parent component
+      onDelete(article.slug);
     }
   };
 
@@ -38,7 +34,7 @@ const ArticleItem = ({ article, isAuthor, onDelete }) => {
         <div className="article__box-title">
           <h4>{article.title}</h4>
           <FaRegHeart className="article__box-icon" />
-          <p>{article.favoritesCount}</p>
+          <button>{article.favoritesCount}</button>
         </div>
         <div className="article__tags-container">
           {hasValidTags ? (

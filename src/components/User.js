@@ -11,6 +11,7 @@ export default function User({ userName, userImage, formattedDate }) {
         src={userImage ? userImage : defaultUserImage}
         className="user-image"
         alt="user"
+        onError={() => defaultUserImage}
       ></img>
     </div>
   );

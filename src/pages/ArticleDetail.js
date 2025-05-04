@@ -9,15 +9,15 @@ import ReactMarkdown from "react-markdown";
 import Loading from "../components/Loading";
 import ErrorMessage from "../components/ErrorMessage";
 import ArticleItem from "../components/ArticleItem";
-import { axiosInstance, setLoader } from "../api/axios-plugin";
+import { setLoader } from "../service/api/axios-plugin";
 
 // Import Css Module
 import "../assets/styles/Pages.css";
 import { AuthContext } from "../contexts/AuthContext";
+import articlesService from "../service/articles/articlesService";
 
 // import ErrorMessage from "../components/ErrorMessage"; // Uncomment
 
-const API_URL = "https://realworld.habsidev.com/api/articles";
 const useFetchArticle = (slug) => {
   const [article, setArticle] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -35,11 +35,8 @@ const useFetchArticle = (slug) => {
       try {
         setTimeout(async () => {
           try {
-            const response = await axiosInstance.get(`${API_URL}/${slug}`);
-            if (response.status !== 200) {
-              throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            setArticle(response.data.article); // Adjust based on API response structure
+            const response = await articlesService.getArticleBySlug(slug);
+            setArticle(response);
           } catch (innerErr) {
             setError(innerErr.message);
           }
@@ -88,11 +85,10 @@ const ArticleDetailPage = () => {
   const isAuthor =
     article && article.author && userName === article.author.username;
 
-  const handleDeleteArticle = async (slug) => {
+  const handleDeleteArticle = async () => {
     try {
-      await axiosInstance.delete(`/articles/${slug}`);
+      await articlesService.deleteArticle(slug);
       navigate("/");
-      console.log("Article deleted successfully");
     } catch (error) {
       console.error("Error deleting article:", error);
     }
