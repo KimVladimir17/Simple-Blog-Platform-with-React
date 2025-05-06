@@ -2,18 +2,14 @@ import { useContext, useEffect, useRef, useState } from "react";
 import articlesService from "../service/articles/articlesService";
 import { AuthContext } from "../contexts/AuthContext";
 
-const ArticleForm = ({
-  initialValues,
-  onSubmit,
-  inputError,
-  setInputError,
-}) => {
+const ArticleForm = ({ initialValues, onSubmit }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [text, setText] = useState("");
   const [tag, setTag] = useState([]);
   const [newTag, setNewTag] = useState("");
   const [tagError, setTagError] = useState("");
+  const [inputError, setInputError] = useState([]);
 
   const inputRef = useRef();
   const titleInputRef = useRef();
@@ -62,19 +58,26 @@ const ArticleForm = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const errors = {};
+
     const trimmed = title.trim();
     const cleaned = trimmed.replace(/[^a-zA-Z0-9а-яА-ЯёЁ\s]/g, "");
-    if (trimmed === "" || !cleaned) {
-      setInputError("Title is required");
-      return;
+    if (trimmed === "" || !cleaned) errors.title = "Title is required";
+    if (description.trim() === "")
+      errors.description = "Description is required";
+    if (text.trim() === "") errors.body = "Text is required";
+    setInputError(errors);
+    if (Object.keys(errors).length > 0) {
+      return false;
     }
+
     const isUnique = await articlesService.isTitleUnique(
       title,
       userName,
       initialValues?.slug
     );
     if (!isUnique) {
-      setInputError("Title is already taken.");
+      setInputError((prev) => ({ ...prev, title: "Title is already taken." }));
       return;
     }
     onSubmit({ title, description, body: text, tagList: tag });
@@ -95,7 +98,7 @@ const ArticleForm = ({
               onChange={(e) => setTitle(e.target.value)}
               ref={titleInputRef}
             />
-            {inputError && <p className="error-message">{inputError}</p>}
+            {inputError && <p className="error-message">{inputError.title}</p>}
           </div>
           <div className="article-form-input">
             <label>Short description</label>
@@ -106,6 +109,9 @@ const ArticleForm = ({
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
+            {inputError && (
+              <p className="error-message">{inputError.description}</p>
+            )}
           </div>
           <div className="article-form-input">
             <label>Text</label>
@@ -115,6 +121,7 @@ const ArticleForm = ({
               value={text}
               onChange={(e) => setText(e.target.value)}
             ></textarea>
+            {inputError && <p className="error-message">{inputError.body}</p>}
           </div>
           <div className="article-form-input">
             <label>Tags</label>

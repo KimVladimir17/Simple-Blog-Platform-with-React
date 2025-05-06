@@ -58,6 +58,14 @@ const articlesService = {
       return false;
     }
   },
+  favoriteArticle: async (slug) => {
+    const res = await axiosInstance.post(`/articles/${slug}/favorite`);
+    return res.data.article;
+  },
+  unFavoriteArticle: async (slug) => {
+    const res = await axiosInstance.delete(`/articles/${slug}/favorite`);
+    return res.data.article;
+  },
 };
 
 export default articlesService;

@@ -5,9 +5,14 @@ const INPUT_FIELDS = [
     placeholder: "Enter User name",
     text: "User name",
   },
-  { name: "email", type: "email", placeholder: "Email address", text: "Email" },
 
-  { name: "image", type: "text", placeholder: "Your photo", text: "Photo" },
+  { name: "email", type: "email", placeholder: "Email address", text: "Email" },
+  {
+    name: "image",
+    type: "file",
+    placeholder: "Image",
+    text: "Photo",
+  },
   {
     name: "password",
     type: "password",

@@ -6,7 +6,6 @@ import { setLoader } from "../service/api/axios-plugin";
 const EditArticle = () => {
   const { slug } = useParams();
   const [article, setArticle] = useState(null);
-  const [inputError, setInputError] = useState(null);
   const navigate = useNavigate();
   useEffect(() => {
     const fetchArticle = async () => {
@@ -29,14 +28,7 @@ const EditArticle = () => {
       console.error("Error checking title uniqueness:", error);
     }
   };
-  return (
-    <ArticleForm
-      initialValues={article}
-      onSubmit={handleEditArticle}
-      inputError={inputError}
-      setInputError={setInputError}
-    />
-  );
+  return <ArticleForm initialValues={article} onSubmit={handleEditArticle} />;
 };
 
 export default EditArticle;

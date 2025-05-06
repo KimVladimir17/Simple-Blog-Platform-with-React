@@ -10,10 +10,8 @@ import "../assets/styles/Pages.css";
 // Import React Components
 import { NavLink, useNavigate } from "react-router-dom";
 import { inputValidate, formValidate } from "../service/utils/valitadeUserData";
-import Loading from "../components/Loading";
 import valitadeApi from "../service/utils/valitadeApi";
 import { AuthService } from "../service/api/AuthService";
-import { UserService } from "../service/api/UserService";
 
 const SignUp = () => {
   const [formValues, setFormValues] = useState({}); // Состояние для всех полей
@@ -61,11 +59,11 @@ const SignUp = () => {
           <input
             type={field.type}
             id={field.name}
-            name={field.text} // Важно для связи с состоянием
+            name={field.text}
             className="form-input"
             placeholder={field.placeholder}
-            value={formValues[field.name] || ""} // Получаем значение из состояния
-            onChange={handleInputChange} // Используем один обработчик для всех полей
+            value={formValues[field.name] || ""}
+            onChange={handleInputChange}
           />
           {inputError[field.name] && (
             <p className="error-message">{inputError[field.name]}</p>

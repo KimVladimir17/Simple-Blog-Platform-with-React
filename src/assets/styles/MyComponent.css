@@ -17,6 +17,7 @@
     background: #fff;
     border-radius: 5px;
     box-shadow: 0px 4px 12px 0px #00000026;
+    will-change: transform;
 }
 
 .article-link {
@@ -47,6 +48,16 @@
 
 .article__box-icon {
     margin: 0 5px 0 13px;
+
+}
+
+.article__box-icon.active {
+    color: #FF0707;
+    outline: none;
+}
+
+button {
+    outline: none;
 }
 
 .article__tags-container {
@@ -81,6 +92,7 @@
     justify-content: space-between;
     margin-top: 30px;
     font-size: 14px;
+    position: relative;
 }
 
 .article-btn {
@@ -200,4 +212,75 @@ button {
     width: 46px;
     height: 46px;
     border-radius: 50%;
+}
+
+
+
+/* -------------- modal */
+.modal {
+    position: absolute;
+    left: 80px;
+    top: -3px;
+}
+
+.modal-content-title {
+    position: relative;
+    padding-left: 23px;
+    margin-bottom: 12px;
+}
+
+.modal-content-title::after {
+    content: '!';
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    top: 0;
+    left: 0;
+    background: #FAAD14;
+    border-radius: 50%;
+    color: #fff;
+    text-align: center;
+}
+
+.modal-content {
+    position: relative;
+    background: #fff;
+    border-radius: 4px;
+    padding: 16px 17px;
+    width: 240px;
+    z-index: 5;
+    box-shadow: 0 2px 8px 0 #00000026;
+}
+
+.modal-content::after {
+    position: absolute;
+    content: '';
+    width: 10px;
+    height: 10px;
+    background: #fff;
+    top: 13px;
+    left: -4px;
+    rotate: 45deg;
+    z-index: -2;
+}
+
+.modal-buttons {
+    text-align: end;
+}
+
+.modal-button {
+    margin-right: 8px;
+    padding: 1px 8px;
+    border: 1px solid #00000026;
+    border-radius: 4px;
+    line-height: 22px;
+}
+
+.modal-button.active {
+    color: #fff;
+    background: #1890FF;
+}
+
+.modal-button:last-child {
+    margin: 0;
 }

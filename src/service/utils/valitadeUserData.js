@@ -1,12 +1,6 @@
 import INPUT_FIELDS from "../db/db";
 
-const inputValidate = (
-  event,
-  formValues,
-  setFormValues,
-  inputError,
-  setInputError
-) => {
+const inputValidate = (event, setFormValues, inputError, setInputError) => {
   const { id, name, value } = event.target;
   setFormValues((prev) => ({ ...prev, [id]: value }));
 

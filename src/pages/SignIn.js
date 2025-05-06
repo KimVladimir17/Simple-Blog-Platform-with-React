@@ -15,7 +15,7 @@ const SignIn = () => {
   const [inputError, setInputError] = useState({});
   const navigate = useNavigate();
 
-  const { login } = useContext(AuthContext); // Use login from context
+  const { login } = useContext(AuthContext);
 
   const loginFormInput = INPUT_FIELDS.filter(
     (field) => field.name === "email" || field.name === "password"
@@ -32,12 +32,12 @@ const SignIn = () => {
       if (!formValues[field.name]) {
         newErrors[field.name] = `${field.text} is required`;
       }
-    }); // Get errors from validateInput
+    });
 
-    setInputError(newErrors); // Set errors using the hook's function
+    setInputError(newErrors);
 
     if (Object.keys(newErrors).length > 0) {
-      return false; // Stop the process if errors exist
+      return false;
     }
 
     try {

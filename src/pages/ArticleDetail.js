@@ -15,6 +15,7 @@ import { setLoader } from "../service/api/axios-plugin";
 import "../assets/styles/Pages.css";
 import { AuthContext } from "../contexts/AuthContext";
 import articlesService from "../service/articles/articlesService";
+import { useFavoriteToggle } from "../service/utils/useFavoriteArticle";
 
 // import ErrorMessage from "../components/ErrorMessage"; // Uncomment
 
@@ -48,15 +49,15 @@ const useFetchArticle = (slug) => {
     fetchArticle();
   }, [slug]);
 
-  return { article, loading, error };
+  return { article, setArticle, loading, error };
 };
 
 const ArticleDetailPage = () => {
   const { slug } = useParams();
-  const { article, loading, error } = useFetchArticle(slug);
+  const { article, setArticle, loading, error } = useFetchArticle(slug);
   const navigate = useNavigate();
-
   const { userName } = useContext(AuthContext);
+  const handleFavoriteToggle = useFavoriteToggle(setArticle);
 
   if (loading) return <Loading />;
 
@@ -102,6 +103,7 @@ const ArticleDetailPage = () => {
           onDelete={handleDeleteArticle}
           isAuthor={isAuthor}
           slug={slug}
+          onFavoriteToggle={handleFavoriteToggle}
         ></ArticleItem>
         <div className="markdown-container">
           <ReactMarkdown children={markdownMainText}></ReactMarkdown>

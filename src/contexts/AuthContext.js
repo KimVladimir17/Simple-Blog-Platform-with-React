@@ -29,9 +29,9 @@ const AuthProvider = ({ children }) => {
     setUserImage(null);
   };
 
-  const updateUser = (userData) => {
+  const updateUser = (userData, userImage) => {
     setUserName(userData.username);
-    setUserImage(userData.image);
+    setUserImage(userImage);
   };
 
   return (

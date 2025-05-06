@@ -12,8 +12,8 @@ import ErrorMessage from "../components/ErrorMessage";
 import { setLoader } from "../service/api/axios-plugin";
 
 // Import React Components
-import { NavLink } from "react-router-dom";
 import articlesService from "../service/articles/articlesService";
+import { useFavoriteToggle } from "../service/utils/useFavoriteArticle";
 
 const ArticleListPage = () => {
   const [articles, setArticles] = useState([]);
@@ -22,6 +22,7 @@ const ArticleListPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [articlesPerPage] = useState(5);
   const [totalArticlesCount, setTotalArticlesCount] = useState(0);
+  const handleFavoriteToggle = useFavoriteToggle(setArticles);
 
   useEffect(() => {
     setLoader(setLoading);
@@ -67,9 +68,10 @@ const ArticleListPage = () => {
       <ul className="article-list">
         {articles.map((article) => (
           <li key={article.slug} className="article-item">
-            <NavLink to={`/articles/${article.slug}`} className="article-link">
-              <ArticleItem article={article}></ArticleItem>
-            </NavLink>
+            <ArticleItem
+              article={article}
+              onFavoriteToggle={handleFavoriteToggle}
+            ></ArticleItem>
           </li>
         ))}
       </ul>

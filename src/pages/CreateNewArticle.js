@@ -4,7 +4,6 @@ import articlesService from "../service/articles/articlesService";
 import ArticleForm from "../components/ArticleForm";
 
 const CreateNewArticle = () => {
-  const [inputError, setInputError] = useState(null);
   const navigate = useNavigate();
   const handleCreateArticle = async (articleData) => {
     try {
@@ -18,8 +17,6 @@ const CreateNewArticle = () => {
     <ArticleForm
       onSubmit={handleCreateArticle}
       buttonText="Create new article"
-      inputError={inputError}
-      setInputError={setInputError}
     />
   );
 };
