@@ -1,5 +1,5 @@
 // Import Hooks
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
 // Import Css Module
 import "../assets/styles/Pages.css";
@@ -10,10 +10,9 @@ import Loading from "../components/Loading";
 import ArticleItem from "../components/ArticleItem";
 import ErrorMessage from "../components/ErrorMessage";
 import { setLoader } from "../service/api/axios-plugin";
-
-// Import React Components
 import articlesService from "../service/articles/articlesService";
 import { useFavoriteToggle } from "../service/utils/useFavoriteArticle";
+import { AuthContext } from "../contexts/AuthContext";
 
 const ArticleListPage = () => {
   const [articles, setArticles] = useState([]);
@@ -22,7 +21,8 @@ const ArticleListPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [articlesPerPage] = useState(5);
   const [totalArticlesCount, setTotalArticlesCount] = useState(0);
-  const handleFavoriteToggle = useFavoriteToggle(setArticles);
+  const { isAuthenticated } = useContext(AuthContext);
+  const handleFavoriteToggle = useFavoriteToggle(setArticles, isAuthenticated);
 
   useEffect(() => {
     setLoader(setLoading);

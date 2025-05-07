@@ -37,14 +37,12 @@ const EditUserData = () => {
   }, []);
 
   const handleInputChange = (event) => {
-    inputValidate(event, formValues, setFormValues, inputError, setInputError);
+    inputValidate(event, setFormValues, inputError, setInputError);
   };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      setPhotoFile(file);
-    }
+    file ? setPhotoFile(file) : setPhotoFile(null);
   };
 
   const fileToBase64 = (file) => {
@@ -63,15 +61,18 @@ const EditUserData = () => {
     if (Object.keys(newErrors).length > 0) {
       return false;
     }
-    const base64Image = await fileToBase64(photoFile);
+    let base64Image;
+    if (photoFile) {
+      base64Image = await fileToBase64(photoFile);
+    }
     try {
       await UserService.updateUser({
         username: formValues.username,
         email: formValues.email,
         password: formValues.password,
-        image: base64Image || null,
+        image: base64Image || photoFile,
       });
-      updateUser(formValues, base64Image);
+      updateUser(formValues, base64Image || null);
       navigate("/");
     } catch (error) {
       valitadeApi(error, setInputError);

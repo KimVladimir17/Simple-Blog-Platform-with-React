@@ -13,11 +13,16 @@ export const UserService = {
 
   updateUser: async (data) => {
     try {
-      const res = await axiosInstance.put("/user", data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      let res;
+      if (data.image) {
+        res = await axiosInstance.put("/user", data, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+      } else {
+        res = await axiosInstance.put("/user", data);
+      }
       localStorage.setItem("user", JSON.stringify(res.data.user));
       return res.data.user;
     } catch (error) {

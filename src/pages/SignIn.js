@@ -22,7 +22,7 @@ const SignIn = () => {
   );
 
   const handleInputChange = (event) => {
-    inputValidate(event, formValues, setFormValues, inputError, setInputError);
+    inputValidate(event, setFormValues, inputError, setInputError);
   };
 
   const loginHandler = async (e) => {

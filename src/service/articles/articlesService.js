@@ -46,9 +46,9 @@ const articlesService = {
       throw error;
     }
   },
-  isTitleUnique: async (title, userName, currentSlug = "") => {
+  isTitleUnique: async (title, currentSlug = "") => {
     try {
-      const response = await axiosInstance.get(`/articles?author=${userName}`);
+      const response = await axiosInstance.get(`/articles`);
       const found = response.data.articles.some(
         (article) => article.title === title && article.slug !== currentSlug
       );

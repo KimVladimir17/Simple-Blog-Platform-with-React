@@ -11,8 +11,8 @@ const AuthProvider = ({ children }) => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user) {
       setIsAuthenticated(true);
-      setUserName(user ? user.username : null);
-      setUserImage(user ? user.image : null);
+      setUserName(user.username);
+      setUserImage(user.image);
     }
   }, []);
 
@@ -29,9 +29,9 @@ const AuthProvider = ({ children }) => {
     setUserImage(null);
   };
 
-  const updateUser = (userData, userImage) => {
+  const updateUser = (userData, newUserImage) => {
     setUserName(userData.username);
-    setUserImage(userImage);
+    setUserImage(newUserImage);
   };
 
   return (

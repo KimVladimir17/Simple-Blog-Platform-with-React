@@ -72,8 +72,7 @@ const ArticleForm = ({ initialValues, onSubmit }) => {
     }
 
     const isUnique = await articlesService.isTitleUnique(
-      title,
-      userName,
+      title.toLocaleLowerCase(),
       initialValues?.slug
     );
     if (!isUnique) {

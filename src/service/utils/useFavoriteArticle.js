@@ -1,9 +1,10 @@
 import { useCallback } from "react";
 import articlesService from "../../service/articles/articlesService";
 
-export const useFavoriteToggle = (setArticles) => {
+export const useFavoriteToggle = (setArticles, isAuthenticated) => {
   const handleFavoriteToggle = useCallback(
     async (slug, newFavoriteStatus) => {
+      if (!isAuthenticated) return;
       try {
         const updatedArticle = newFavoriteStatus
           ? await articlesService.favoriteArticle(slug)

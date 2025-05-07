@@ -21,7 +21,7 @@ const SignUp = () => {
   const navigate = useNavigate();
 
   const handleInputChange = (event) => {
-    inputValidate(event, formValues, setFormValues, inputError, setInputError);
+    inputValidate(event, setFormValues, inputError, setInputError);
   };
 
   const loginFormInput = INPUT_FIELDS.filter((field) => field.name !== "image");

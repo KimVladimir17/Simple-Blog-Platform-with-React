@@ -38,9 +38,9 @@ export default function RootLayout() {
       </header>
       <main>
         <Outlet
-          context={{
-            userName: userName ? userName.username : "User",
-          }}
+        // context={{
+        //   userName: userName ? userName.username : "User",
+        // }}
         ></Outlet>
       </main>
     </div>

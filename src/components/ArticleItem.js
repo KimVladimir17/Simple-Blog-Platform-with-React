@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo, useContext, useState } from "react";
 // Import Css Module
 import "../assets/styles/MyComponent.css";
 
@@ -9,9 +9,11 @@ import { FaHeart, FaRegHeart } from "react-icons/fa";
 import User from "./User";
 import { NavLink } from "react-router-dom";
 import Modal from "./Modal";
+import { AuthContext } from "../contexts/AuthContext";
 
 const ArticleItem = ({ article, isAuthor, onDelete, onFavoriteToggle }) => {
   const [showModal, setShowModal] = useState(false);
+  const { isAuthenticated } = useContext(AuthContext);
   const formattedDate = new Date(article.updatedAt).toLocaleDateString(
     "en-US",
     {
@@ -51,7 +53,7 @@ const ArticleItem = ({ article, isAuthor, onDelete, onFavoriteToggle }) => {
             <h4>{article.title}</h4>
           </NavLink>
           <button onClick={FavoriteBtn}>
-            {article.favorited ? (
+            {article.favorited && isAuthenticated ? (
               <FaHeart className="article__box-icon active" />
             ) : (
               <FaRegHeart className="article__box-icon"></FaRegHeart>

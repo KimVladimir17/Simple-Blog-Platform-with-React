@@ -56,8 +56,8 @@ const ArticleDetailPage = () => {
   const { slug } = useParams();
   const { article, setArticle, loading, error } = useFetchArticle(slug);
   const navigate = useNavigate();
-  const { userName } = useContext(AuthContext);
-  const handleFavoriteToggle = useFavoriteToggle(setArticle);
+  const { userName, isAuthenticated } = useContext(AuthContext);
+  const handleFavoriteToggle = useFavoriteToggle(setArticle, isAuthenticated);
 
   if (loading) return <Loading />;
 
