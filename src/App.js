@@ -18,20 +18,15 @@ function App() {
     <BrowserRouter>
       <AuthProvider>
         <Routes>
+          <Route index element={<Navigate to="/articles/page1" />} />
           <Route path="/articles" element={<RootLayout />}>
-            <Route
-              path="/articles/page:pageNumber"
-              element={<ArticleListPage />}
-            />
-            <Route path="/articles/:slug" element={<ArticleDetailPage />} />
-            <Route path="/articles/:slug/edit" element={<EditArticle />} />
-            <Route
-              path="/articles/create-new-article"
-              element={<CreateNewArticle />}
-            />
-            <Route path="/articles/edit-profile" element={<EditUserData />} />
-            <Route path="/articles/sign-in" element={<SignIn />} />
-            <Route path="/articles/sign-up" element={<SignUp />} />
+            <Route path="page:pageNumber" element={<ArticleListPage />} />
+            <Route path=":slug" element={<ArticleDetailPage />} />
+            <Route path=":slug/edit" element={<EditArticle />} />
+            <Route path="create-new-article" element={<CreateNewArticle />} />
+            <Route path="edit-profile" element={<EditUserData />} />
+            <Route path="sign-in" element={<SignIn />} />
+            <Route path="sign-up" element={<SignUp />} />
           </Route>
         </Routes>
       </AuthProvider>
