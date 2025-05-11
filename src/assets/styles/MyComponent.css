@@ -155,6 +155,10 @@ button {
     margin-top: 26px;
 }
 
+.pagination a {
+    color: #000000BF;
+}
+
 button {
     border: none;
     background: none;
@@ -283,4 +287,18 @@ button {
 
 .modal-button:last-child {
     margin: 0;
+}
+
+.custom-file-label {
+    background-color: #1890FF;
+    color: white;
+    padding: 9px 12px;
+    border-radius: 2px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.custom-file-text {
+    margin-left: 10px;
 }

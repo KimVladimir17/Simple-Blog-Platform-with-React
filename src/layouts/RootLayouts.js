@@ -6,20 +6,40 @@ import DefaultNav from "./DefaultNav";
 import UserNav from "./UserNav";
 
 // import Hooks
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { AuthContext } from "../contexts/AuthContext"; // Corrected import
+import { useLocation } from "react-router-dom";
+import favoriteToggle from "../customhooks/useFavoriteArticle";
 
 export default function RootLayout() {
   const { isAuthenticated, userName, logout, userImage } =
     useContext(AuthContext);
+  const [updateStatusList, setUpdateStatusList] = useState({});
+  const location = useLocation();
 
+  useEffect(() => {
+    try {
+      if (Object.keys(updateStatusList).length > 0) {
+        favoriteToggle(isAuthenticated, updateStatusList);
+        setUpdateStatusList({});
+      }
+    } catch (err) {
+      console.error("Ошибка при отправке изменений:", err);
+    }
+  }, [location.pathname]);
+
+  const logOutHadler = () => {
+    favoriteToggle(isAuthenticated, updateStatusList);
+    setUpdateStatusList({});
+    logout();
+  };
   return (
     <div className="root-layout">
       <header>
         <nav className="nav">
           <NavLink
-            to="/"
+            to="/articles/page1"
             style={{ color: "#000", border: "none" }}
             className="nav-link"
           >
@@ -29,7 +49,7 @@ export default function RootLayout() {
             <UserNav
               userImage={userImage ? userImage : null}
               userName={userName ? userName : "User"}
-              logout={logout}
+              logout={logOutHadler}
             ></UserNav>
           ) : (
             <DefaultNav></DefaultNav>
@@ -37,11 +57,7 @@ export default function RootLayout() {
         </nav>
       </header>
       <main>
-        <Outlet
-        // context={{
-        //   userName: userName ? userName.username : "User",
-        // }}
-        ></Outlet>
+        <Outlet context={{ setUpdateStatusList: setUpdateStatusList }}></Outlet>
       </main>
     </div>
   );

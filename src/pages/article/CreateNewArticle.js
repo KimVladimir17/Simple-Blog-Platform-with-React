@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import articlesService from "../service/articles/articlesService";
-import ArticleForm from "../components/ArticleForm";
+import articlesService from "../../services/articles/articlesService";
+import ArticleForm from "../article/components/ArticleForm";
 
 const CreateNewArticle = () => {
   const navigate = useNavigate();
   const handleCreateArticle = async (articleData) => {
     try {
       await articlesService.createArticle(articleData);
-      navigate("/");
+      navigate("/articles/page1");
     } catch (error) {
       console.error("Error checking title uniqueness:", error);
     }

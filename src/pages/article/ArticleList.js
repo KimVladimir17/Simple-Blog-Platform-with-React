@@ -1,28 +1,27 @@
 // Import Hooks
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 
 // Import Css Module
-import "../assets/styles/Pages.css";
+import "../../assets/styles/Pages.css";
 
 // Import My components
-import Pagination from "../components/Pagination";
-import Loading from "../components/Loading";
-import ArticleItem from "../components/ArticleItem";
-import ErrorMessage from "../components/ErrorMessage";
-import { setLoader } from "../service/api/axios-plugin";
-import articlesService from "../service/articles/articlesService";
-import { useFavoriteToggle } from "../service/utils/useFavoriteArticle";
-import { AuthContext } from "../contexts/AuthContext";
+import Pagination from "../../components/Pagination";
+import Loading from "../../components/Loading";
+import ArticleItem from "../article/components/ArticleItem";
+import ErrorMessage from "../../components/ErrorMessage";
+import { setLoader } from "../../plugins/axios-plugin";
+import articlesService from "../../services/articles/articlesService";
+import { useOutletContext, useParams } from "react-router-dom";
 
 const ArticleListPage = () => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const { pageNumber } = useParams();
+  const [currentPage, setCurrentPage] = useState(pageNumber || 1);
   const [articlesPerPage] = useState(5);
   const [totalArticlesCount, setTotalArticlesCount] = useState(0);
-  const { isAuthenticated } = useContext(AuthContext);
-  const handleFavoriteToggle = useFavoriteToggle(setArticles, isAuthenticated);
+  const { setUpdateStatusList } = useOutletContext();
 
   useEffect(() => {
     setLoader(setLoading);
@@ -69,8 +68,8 @@ const ArticleListPage = () => {
         {articles.map((article) => (
           <li key={article.slug} className="article-item">
             <ArticleItem
+              setUpdateStatusList={setUpdateStatusList}
               article={article}
-              onFavoriteToggle={handleFavoriteToggle}
             ></ArticleItem>
           </li>
         ))}

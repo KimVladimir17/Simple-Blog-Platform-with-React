@@ -2,13 +2,13 @@
 import { useContext, useState } from "react";
 
 // Import My Components
-import INPUT_FIELDS from "../service/db/db";
+import INPUT_FIELDS from "../constans/constans";
 
 // Import React Components
 import { NavLink, useNavigate } from "react-router-dom";
-import { inputValidate } from "../service/utils/valitadeUserData";
+import { inputValidate } from "../customhooks/useValitadeUserData";
 import { AuthContext } from "../contexts/AuthContext";
-import { AuthService } from "../service/api/AuthService";
+import { AuthService } from "../services/auth/AuthService";
 
 const SignIn = () => {
   const [formValues, setFormValues] = useState({});
@@ -46,7 +46,7 @@ const SignIn = () => {
         formValues.password
       );
       login(userData);
-      navigate("/");
+      navigate("/articles/page1");
     } catch (error) {
       console.log(error);
       setFormValues("");
@@ -78,7 +78,7 @@ const SignIn = () => {
         <button className="form-input-btn">Login</button>
         <div>
           <span>Don’t have an account? </span>
-          <NavLink to="/sign-up" className="nav-link ">
+          <NavLink to="/articles/sign-up" className="nav-link ">
             Sign Up.
           </NavLink>
         </div>

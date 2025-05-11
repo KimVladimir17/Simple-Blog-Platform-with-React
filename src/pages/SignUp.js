@@ -2,19 +2,22 @@ import { useState } from "react";
 
 // Import My Components
 
-import INPUT_FIELDS from "../service/db/db";
+import INPUT_FIELDS from "../constans/constans";
 
 // Import Css Module
 import "../assets/styles/Pages.css";
 
 // Import React Components
 import { NavLink, useNavigate } from "react-router-dom";
-import { inputValidate, formValidate } from "../service/utils/valitadeUserData";
-import valitadeApi from "../service/utils/valitadeApi";
-import { AuthService } from "../service/api/AuthService";
+import {
+  inputValidate,
+  formValidate,
+} from "../customhooks/useValitadeUserData";
+import valitadeApi from "../customhooks/useValitadeApi";
+import { AuthService } from "../services/auth/AuthService";
 
 const SignUp = () => {
-  const [formValues, setFormValues] = useState({}); // Состояние для всех полей
+  const [formValues, setFormValues] = useState({});
   const [inputError, setInputError] = useState({});
 
   const [isLoading, setIsLoading] = useState(false);
@@ -41,7 +44,7 @@ const SignUp = () => {
         formValues.email,
         formValues.password
       );
-      navigate("/sign-in");
+      navigate("/articles/sign-in");
     } catch (error) {
       valitadeApi(error, setInputError);
     } finally {
@@ -80,7 +83,7 @@ const SignUp = () => {
         <button className="form-input-btn">Create</button>
         <div>
           <span>Already have an account? </span>
-          <NavLink to="/sign-in" className="nav-link ">
+          <NavLink to="/articles/sign-in" className="nav-link ">
             Sign In
           </NavLink>
         </div>

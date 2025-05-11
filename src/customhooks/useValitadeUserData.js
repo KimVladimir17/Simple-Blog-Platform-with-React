@@ -1,4 +1,4 @@
-import INPUT_FIELDS from "../db/db";
+import INPUT_FIELDS from "../constans/constans";
 
 const inputValidate = (event, setFormValues, inputError, setInputError) => {
   const { id, name, value } = event.target;

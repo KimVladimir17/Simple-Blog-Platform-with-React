@@ -1,4 +1,4 @@
-import { axiosInstance } from "./axios-plugin";
+import { axiosInstance } from "../../plugins/axios-plugin";
 
 export const UserService = {
   getCurrentUser: async () => {
@@ -7,22 +7,14 @@ export const UserService = {
       return res.data.user;
     } catch (error) {
       console.error("Error getting current user:", error);
-      throw error; // Re-throw the error to be handled by the caller
+      throw error;
     }
   },
 
-  updateUser: async (data) => {
+  updateUser: async (formData, fileName) => {
     try {
-      let res;
-      if (data.image) {
-        res = await axiosInstance.put("/user", data, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-      } else {
-        res = await axiosInstance.put("/user", data);
-      }
+      let res = await axiosInstance.put("/user", formData);
+      res.data.user.imageName = fileName;
       localStorage.setItem("user", JSON.stringify(res.data.user));
       return res.data.user;
     } catch (error) {

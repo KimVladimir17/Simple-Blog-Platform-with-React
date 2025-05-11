@@ -1,4 +1,4 @@
-import { axiosInstance } from "../api/axios-plugin";
+import { axiosInstance } from "../../plugins/axios-plugin";
 
 const articlesService = {
   getArticles: async (articlesPerPage, currentPage) => {

@@ -1,19 +1,21 @@
-import React, { memo, useContext, useState } from "react";
+import React, { memo, useContext, useEffect, useState } from "react";
 // Import Css Module
-import "../assets/styles/MyComponent.css";
+import "../../../assets/styles/MyComponent.css";
 
 // Import Icon
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 
 // Import My components
-import User from "./User";
+import User from "../../../components/User";
 import { NavLink } from "react-router-dom";
-import Modal from "./Modal";
-import { AuthContext } from "../contexts/AuthContext";
+import Modal from "../../../components/Modal";
+import { AuthContext } from "../../../contexts/AuthContext";
 
-const ArticleItem = ({ article, isAuthor, onDelete, onFavoriteToggle }) => {
+const ArticleItem = ({ article, isAuthor, onDelete, setUpdateStatusList }) => {
   const [showModal, setShowModal] = useState(false);
   const { isAuthenticated } = useContext(AuthContext);
+  const [favorited, setFavorited] = useState(article.favorited);
+  const [favoritedCount, setFavoritedCount] = useState(article.favoritesCount);
   const formattedDate = new Date(article.updatedAt).toLocaleDateString(
     "en-US",
     {
@@ -22,6 +24,14 @@ const ArticleItem = ({ article, isAuthor, onDelete, onFavoriteToggle }) => {
       day: "numeric",
     }
   );
+
+  useEffect(() => {
+    setFavorited(article.favorited);
+    setFavoritedCount(article.favoritesCount);
+    setUpdateStatusList((prev) => ({
+      ...prev,
+    }));
+  }, [article.favorited]);
 
   const validTags = article.tagList?.filter((tag) => tag != null) || [];
 
@@ -38,10 +48,15 @@ const ArticleItem = ({ article, isAuthor, onDelete, onFavoriteToggle }) => {
   const FavoriteBtn = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    try {
-      await onFavoriteToggle(article.slug, !article.favorited); // Переключить статус избранного в родительском компоненте
-    } catch (error) {
-      console.error("Ошибка добавления в избранное:", error); // Запись в лог для отладки
+    if (isAuthenticated) {
+      favorited ? setFavorited(false) : setFavorited(true);
+      const newFavorited = !favorited;
+      setFavorited(newFavorited);
+      setFavoritedCount((prev) => (newFavorited ? prev + 1 : prev - 1));
+      setUpdateStatusList((prev) => ({
+        ...prev,
+        [article.slug]: newFavorited,
+      }));
     }
   };
 
@@ -53,13 +68,13 @@ const ArticleItem = ({ article, isAuthor, onDelete, onFavoriteToggle }) => {
             <h4>{article.title}</h4>
           </NavLink>
           <button onClick={FavoriteBtn}>
-            {article.favorited && isAuthenticated ? (
+            {favorited && isAuthenticated ? (
               <FaHeart className="article__box-icon active" />
             ) : (
               <FaRegHeart className="article__box-icon"></FaRegHeart>
             )}
           </button>
-          <p>{article.favoritesCount}</p>
+          <p>{favoritedCount}</p>
         </div>
         <div className="article__tags-container">
           {hasValidTags ? (

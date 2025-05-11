@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import articlesService from "../service/articles/articlesService";
-import { AuthContext } from "../contexts/AuthContext";
+import articlesService from "../../../services/articles/articlesService";
+import { AuthContext } from "../../../contexts/AuthContext";
 
 const ArticleForm = ({ initialValues, onSubmit }) => {
   const [title, setTitle] = useState("");

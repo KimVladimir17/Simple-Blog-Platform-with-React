@@ -2,22 +2,19 @@
 import { useState, useEffect, useContext } from "react";
 
 // Import React Components
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 
 // Import My Components
-import Loading from "../components/Loading";
-import ErrorMessage from "../components/ErrorMessage";
-import ArticleItem from "../components/ArticleItem";
-import { setLoader } from "../service/api/axios-plugin";
+import Loading from "../../components/Loading";
+import ErrorMessage from "../../components/ErrorMessage";
+import ArticleItem from "../article/components/ArticleItem";
+import { setLoader } from "../../plugins/axios-plugin";
 
 // Import Css Module
-import "../assets/styles/Pages.css";
-import { AuthContext } from "../contexts/AuthContext";
-import articlesService from "../service/articles/articlesService";
-import { useFavoriteToggle } from "../service/utils/useFavoriteArticle";
-
-// import ErrorMessage from "../components/ErrorMessage"; // Uncomment
+import "../../assets/styles/Pages.css";
+import { AuthContext } from "../../contexts/AuthContext";
+import articlesService from "../../services/articles/articlesService";
 
 const useFetchArticle = (slug) => {
   const [article, setArticle] = useState(null);
@@ -49,19 +46,19 @@ const useFetchArticle = (slug) => {
     fetchArticle();
   }, [slug]);
 
-  return { article, setArticle, loading, error };
+  return { article, loading, error };
 };
 
 const ArticleDetailPage = () => {
   const { slug } = useParams();
-  const { article, setArticle, loading, error } = useFetchArticle(slug);
+  const { article, loading, error } = useFetchArticle(slug);
   const navigate = useNavigate();
-  const { userName, isAuthenticated } = useContext(AuthContext);
-  const handleFavoriteToggle = useFavoriteToggle(setArticle, isAuthenticated);
+  const { userName } = useContext(AuthContext);
+  const { setUpdateStatusList } = useOutletContext();
 
   if (loading) return <Loading />;
 
-  if (error) return <ErrorMessage message={error} />; // Uncomment ErrorMessage
+  if (error) return <ErrorMessage message={error} />;
 
   if (!article) return <p>Article not found.</p>;
 
@@ -72,7 +69,7 @@ const ArticleDetailPage = () => {
 
   const markdownTags =
     article.tagList.length === 0
-      ? "No tags" // Если нет тегов, выводим сообщение
+      ? "No tags"
       : article.tagList
           .map(
             (tag, index) =>
@@ -89,7 +86,7 @@ const ArticleDetailPage = () => {
   const handleDeleteArticle = async () => {
     try {
       await articlesService.deleteArticle(slug);
-      navigate("/");
+      navigate("/articles/page1");
     } catch (error) {
       console.error("Error deleting article:", error);
     }
@@ -103,7 +100,7 @@ const ArticleDetailPage = () => {
           onDelete={handleDeleteArticle}
           isAuthor={isAuthor}
           slug={slug}
-          onFavoriteToggle={handleFavoriteToggle}
+          setUpdateStatusList={setUpdateStatusList}
         ></ArticleItem>
         <div className="markdown-container">
           <ReactMarkdown children={markdownMainText}></ReactMarkdown>
