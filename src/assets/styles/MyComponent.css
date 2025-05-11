@@ -179,6 +179,13 @@ button {
     margin-right: 24px;
 }
 
+.pagination .prev.disabled,
+.pagination .next.disabled {
+    color: gray;
+    pointer-events: none;
+    text-decoration: none;
+}
+
 .pagination .prev.acitiveBtn {
     color: #979797;
 }
