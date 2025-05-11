@@ -1,7 +1,5 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import articlesService from "../../../services/articles/articlesService";
-import { AuthContext } from "../../../contexts/AuthContext";
-
 const ArticleForm = ({ initialValues, onSubmit }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -13,8 +11,6 @@ const ArticleForm = ({ initialValues, onSubmit }) => {
 
   const inputRef = useRef();
   const titleInputRef = useRef();
-
-  const { userName } = useContext(AuthContext);
 
   useEffect(() => {
     titleInputRef.current.focus();
