@@ -8,7 +8,7 @@ import INPUT_FIELDS from "../constans/constans";
 import "../assets/styles/Pages.css";
 
 // Import React Components
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import {
   inputValidate,
   formValidate,
@@ -24,6 +24,7 @@ const EditUserData = () => {
   const navigate = useNavigate();
   const { updateUser, fileName } = useContext(AuthContext);
   const [newFileName, setNewFileName] = useState();
+  const { setCurrentPage } = useOutletContext();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -86,6 +87,7 @@ const EditUserData = () => {
         await UserService.updateUser(formData, newFileName);
       }
       updateUser(formValues, base64Image, newFileName);
+      setCurrentPage(1);
       navigate("/articles/page1");
     } catch (error) {
       valitadeApi(error, setInputError);

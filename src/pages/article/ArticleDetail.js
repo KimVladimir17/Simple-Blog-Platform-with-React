@@ -2,7 +2,7 @@
 import { useState, useEffect, useContext } from "react";
 
 // Import React Components
-import { useNavigate, useOutletContext, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 
 // Import My Components
@@ -54,7 +54,6 @@ const ArticleDetailPage = () => {
   const { article, loading, error } = useFetchArticle(slug);
   const navigate = useNavigate();
   const { userName } = useContext(AuthContext);
-  const { setUpdateStatusList } = useOutletContext();
 
   if (loading) return <Loading />;
 
@@ -100,7 +99,6 @@ const ArticleDetailPage = () => {
           onDelete={handleDeleteArticle}
           isAuthor={isAuthor}
           slug={slug}
-          setUpdateStatusList={setUpdateStatusList}
         ></ArticleItem>
         <div className="markdown-container">
           <ReactMarkdown children={markdownMainText}></ReactMarkdown>

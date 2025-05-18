@@ -2,7 +2,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import ArticleForm from "../article/components/ArticleForm";
 import { useEffect, useState } from "react";
 import articlesService from "../../services/articles/articlesService";
-import { setLoader } from "../../plugins/axios-plugin";
 const EditArticle = () => {
   const { slug } = useParams();
   const [article, setArticle] = useState(null);

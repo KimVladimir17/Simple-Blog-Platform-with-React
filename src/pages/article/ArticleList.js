@@ -1,5 +1,5 @@
 // Import Hooks
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 // Import Css Module
 import "../../assets/styles/Pages.css";
@@ -11,17 +11,15 @@ import ArticleItem from "../article/components/ArticleItem";
 import ErrorMessage from "../../components/ErrorMessage";
 import { setLoader } from "../../plugins/axios-plugin";
 import articlesService from "../../services/articles/articlesService";
-import { useOutletContext, useParams } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 
-const ArticleListPage = () => {
+const ArticleListPage = React.memo(() => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { pageNumber } = useParams();
-  const [currentPage, setCurrentPage] = useState(pageNumber || 1);
+  const { setCurrentPage, currentPage } = useOutletContext();
   const [articlesPerPage] = useState(5);
   const [totalArticlesCount, setTotalArticlesCount] = useState(0);
-  const { setUpdateStatusList } = useOutletContext();
 
   useEffect(() => {
     setLoader(setLoading);
@@ -67,10 +65,7 @@ const ArticleListPage = () => {
       <ul className="article-list">
         {articles.map((article) => (
           <li key={article.slug} className="article-item">
-            <ArticleItem
-              setUpdateStatusList={setUpdateStatusList}
-              article={article}
-            ></ArticleItem>
+            <ArticleItem article={article}></ArticleItem>
           </li>
         ))}
       </ul>
@@ -81,6 +76,6 @@ const ArticleListPage = () => {
       ></Pagination>
     </div>
   );
-};
+});
 
 export default ArticleListPage;

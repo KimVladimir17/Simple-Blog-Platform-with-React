@@ -2,7 +2,7 @@ import axios from "axios";
 
 const axiosInstance = axios.create({
   baseURL: "https://realworld.habsidev.com/api",
-  timeout: 10000,
+  // timeout: 10000,
   headers: {
     "Content-Type": "application/json",
   },
@@ -24,10 +24,9 @@ axiosInstance.interceptors.request.use(
         config.headers.Authorization = `Token ${user.token}`;
       }
     }
-
-    if (setLoadingCallback) {
-      setLoadingCallback(true);
-    }
+    // if (setLoadingCallback) {
+    //   setLoadingCallback(true);
+    // }
     return config;
   },
   (error) => {

@@ -13,9 +13,9 @@ const Pagination = ({ currentPage, totalArticlesPage, onPageChange }) => {
   return (
     <div className="pagination">
       <NavLink
-        to={makeSlug(Number(currentPage) - 1)}
-        onClick={() => onPageChange(Number(currentPage) - 1)}
-        className={`prev ${Number(currentPage) === 1 ? "disabled" : ""}`}
+        to={makeSlug(currentPage - 1)}
+        onClick={() => onPageChange(currentPage - 1)}
+        className={`prev ${currentPage === 1 ? "disabled" : ""}`}
       >
         назад
       </NavLink>
@@ -24,17 +24,17 @@ const Pagination = ({ currentPage, totalArticlesPage, onPageChange }) => {
           to={makeSlug(pageNum)}
           key={pageNum}
           onClick={() => onPageChange(pageNum)}
-          className={`number-page ${currentPage === pageNum ? "active" : ""}`}
+          className={`number-page`}
         >
           {pageNum}
         </NavLink>
       ))}
       <NavLink
-        to={makeSlug(Number(currentPage) + 1)}
-        onClick={() => onPageChange(Number(currentPage) + 1)}
-        disabled={Number(currentPage) === totalArticlesPage}
+        to={makeSlug(currentPage + 1)}
+        onClick={() => onPageChange(currentPage + 1)}
+        disabled={currentPage === totalArticlesPage}
         className={`next ${
-          Number(currentPage) === totalArticlesPage ? "disabled" : ""
+          currentPage === totalArticlesPage ? "disabled" : ""
         }`}
       >
         вперед

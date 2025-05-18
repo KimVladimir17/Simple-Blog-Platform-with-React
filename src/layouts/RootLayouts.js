@@ -1,38 +1,28 @@
 // Import React Components
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useParams } from "react-router-dom";
 
 // Import My Components
 import DefaultNav from "./DefaultNav";
 import UserNav from "./UserNav";
 
 // import Hooks
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 
-import { AuthContext } from "../contexts/AuthContext"; // Corrected import
-import { useLocation } from "react-router-dom";
-import favoriteToggle from "../customhooks/useFavoriteArticle";
+import { AuthContext } from "../contexts/AuthContext";
 
 export default function RootLayout() {
+  const { pageNumber } = useParams();
+  const [currentPage, setCurrentPage] = useState(Number(pageNumber));
   const { isAuthenticated, userName, logout, userImage } =
     useContext(AuthContext);
-  const [updateStatusList, setUpdateStatusList] = useState({});
-  const location = useLocation();
-
-  useEffect(() => {
-    try {
-      if (Object.keys(updateStatusList).length > 0) {
-        favoriteToggle(isAuthenticated, updateStatusList);
-        setUpdateStatusList({});
-      }
-    } catch (err) {
-      console.error("Ошибка при отправке изменений:", err);
-    }
-  }, [location.pathname]);
 
   const logOutHadler = () => {
-    favoriteToggle(isAuthenticated, updateStatusList);
-    setUpdateStatusList({});
+    setCurrentPage(1);
     logout();
+  };
+
+  const mainList = () => {
+    setCurrentPage(1);
   };
   return (
     <div className="root-layout">
@@ -40,6 +30,7 @@ export default function RootLayout() {
         <nav className="nav">
           <NavLink
             to="/articles/page1"
+            onClick={mainList}
             style={{ color: "#000", border: "none" }}
             className="nav-link"
           >
@@ -57,7 +48,12 @@ export default function RootLayout() {
         </nav>
       </header>
       <main>
-        <Outlet context={{ setUpdateStatusList: setUpdateStatusList }}></Outlet>
+        <Outlet
+          context={{
+            currentPage: currentPage,
+            setCurrentPage: setCurrentPage,
+          }}
+        ></Outlet>
       </main>
     </div>
   );

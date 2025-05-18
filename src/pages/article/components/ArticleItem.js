@@ -1,4 +1,4 @@
-import React, { memo, useContext, useEffect, useState } from "react";
+import { memo, useContext, useState } from "react";
 // Import Css Module
 import "../../../assets/styles/MyComponent.css";
 
@@ -10,8 +10,9 @@ import User from "../../../components/User";
 import { NavLink } from "react-router-dom";
 import Modal from "../../../components/Modal";
 import { AuthContext } from "../../../contexts/AuthContext";
+import articlesService from "../../../services/articles/articlesService";
 
-const ArticleItem = ({ article, isAuthor, onDelete, setUpdateStatusList }) => {
+const ArticleItem = ({ article, isAuthor, onDelete }) => {
   const [showModal, setShowModal] = useState(false);
   const { isAuthenticated } = useContext(AuthContext);
   const [favorited, setFavorited] = useState(article.favorited);
@@ -24,14 +25,6 @@ const ArticleItem = ({ article, isAuthor, onDelete, setUpdateStatusList }) => {
       day: "numeric",
     }
   );
-
-  useEffect(() => {
-    setFavorited(article.favorited);
-    setFavoritedCount(article.favoritesCount);
-    setUpdateStatusList((prev) => ({
-      ...prev,
-    }));
-  }, [article.favorited]);
 
   const validTags = article.tagList?.filter((tag) => tag != null) || [];
 
@@ -48,15 +41,21 @@ const ArticleItem = ({ article, isAuthor, onDelete, setUpdateStatusList }) => {
   const FavoriteBtn = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (isAuthenticated) {
-      favorited ? setFavorited(false) : setFavorited(true);
+    if (!isAuthenticated) {
+      alert(`Is not logged in `);
+      return;
+    }
+    try {
       const newFavorited = !favorited;
+      if (newFavorited) {
+        await articlesService.favoriteArticle(article.slug);
+      } else {
+        await articlesService.unFavoriteArticle(article.slug);
+      }
       setFavorited(newFavorited);
       setFavoritedCount((prev) => (newFavorited ? prev + 1 : prev - 1));
-      setUpdateStatusList((prev) => ({
-        ...prev,
-        [article.slug]: newFavorited,
-      }));
+    } catch (err) {
+      console.log(4);
     }
   };
 

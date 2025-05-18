@@ -15,6 +15,7 @@ import {
 } from "../customhooks/useValitadeUserData";
 import valitadeApi from "../customhooks/useValitadeApi";
 import { AuthService } from "../services/auth/AuthService";
+import Loading from "../components/Loading";
 
 const SignUp = () => {
   const [formValues, setFormValues] = useState({});
@@ -37,7 +38,6 @@ const SignUp = () => {
       return;
     }
     setIsLoading(true);
-
     try {
       await AuthService.register(
         formValues.username,
@@ -51,8 +51,7 @@ const SignUp = () => {
       setIsLoading(false);
     }
   };
-
-  // if (isLoading) return <Loading />;
+  if (isLoading) return <Loading />;
   return (
     <form className="form" onSubmit={createAccountHandler}>
       <h3 className="form-title">Create new account</h3>

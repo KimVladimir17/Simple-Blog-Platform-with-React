@@ -5,7 +5,7 @@ import { useContext, useState } from "react";
 import INPUT_FIELDS from "../constans/constans";
 
 // Import React Components
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useOutletContext } from "react-router-dom";
 import { inputValidate } from "../customhooks/useValitadeUserData";
 import { AuthContext } from "../contexts/AuthContext";
 import { AuthService } from "../services/auth/AuthService";
@@ -13,6 +13,7 @@ import { AuthService } from "../services/auth/AuthService";
 const SignIn = () => {
   const [formValues, setFormValues] = useState({});
   const [inputError, setInputError] = useState({});
+  const { setCurrentPage } = useOutletContext();
   const navigate = useNavigate();
 
   const { login } = useContext(AuthContext);
@@ -47,6 +48,7 @@ const SignIn = () => {
       );
       login(userData);
       navigate("/articles/page1");
+      setCurrentPage(1);
     } catch (error) {
       console.log(error);
       setFormValues("");
